@@ -1,4 +1,10 @@
 Site::Application.routes.draw do
+  resources :actions
+
+  resources :users
+
+  resources :data
+
   resources :ideas
 
   # The priority is based upon order of creation:
