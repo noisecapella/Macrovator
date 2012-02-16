@@ -40,6 +40,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    print "YYY",params
     @user = User.new(params[:user])
 
     respond_to do |format|

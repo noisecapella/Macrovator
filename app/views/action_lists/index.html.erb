@@ -1,0 +1,21 @@
+<h1>Listing action_lists</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @action_lists.each do |action_list| %>
+  <tr>
+    <td><%= link_to 'Show', action_list %></td>
+    <td><%= link_to 'Edit', edit_action_list_path(action_list) %></td>
+    <td><%= link_to 'Destroy', action_list, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Action list', new_action_list_path %>

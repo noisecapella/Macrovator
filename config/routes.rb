@@ -1,4 +1,8 @@
 Site::Application.routes.draw do
+  resources :action_lists
+
+  resources :action_types
+
   resources :actions
 
   resources :users
