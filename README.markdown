@@ -10,7 +10,7 @@ The name comes from macros in Emacs, which are also pretty neat ways of manipula
 
 The main idea is that these transformations should be easily tweaked and reordered. The transformation list should be recorded and reusable with other pieces of data (maybe even producing code which would operate on a larger set of data.)
 
-*Some ideas so far:*
+# Some ideas so far
 
 * parse from XML, JSON, or CSV, or start raw. In the beginning maybe only raw and CSV.
 * fuzzy joins based on Levenshtein distance
