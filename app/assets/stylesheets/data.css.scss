@@ -1,3 +1,40 @@
-// Place all the styles related to the Data controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+$border_radius: 15px;
+$border_size: 2px;
+$margin_size: 5px;
+$padding_size: 15px;
+$border_color: #82A4BF;
+
+$total_width: 800px;
+
+#container
+{
+    overflow: auto;
+    min-width: $total_width;
+}
+
+#content
+{
+	margin: $margin_size;
+	padding: $padding_size;
+	border: $border_size solid $border_color;
+	border-radius: $border_radius;
+	-moz-border-radius: $border_radius;
+
+	height: 450px;
+	overflow: auto;
+
+	width: 0.7 * $total_width;
+	float: left;
+}
+
+#sidebar
+{
+	margin: $margin_size;
+	padding: $padding_size;
+	border: $border_size solid $border_color;
+	border-radius: $border_radius;
+	-moz-border-radius: $border_radius;
+
+	float: right;
+	width: 0.2 * $total_width;
+}

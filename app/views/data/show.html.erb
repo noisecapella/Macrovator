@@ -1,15 +1,17 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Content:</b>
+<div id="container">
+<div id="content">
   <%= @datum.content %>
-</p>
+</div>
 
-<p>
-  <b>User:</b>
-  <%= @datum.user_id %>
-</p>
+<div id="sidebar">
+<% @datum.action_list.action_types.each do |action_type| %>
+  Action Type <%= action_type %>
+<% end %>
+</div>  
 
+</div>
 
-<%= link_to 'Edit', edit_datum_path(@datum) %> |
-<%= link_to 'Back', data_path %>
+<%= link_to 'Edit', edit_datum_path(@datum) %>
+

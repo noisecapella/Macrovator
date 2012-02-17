@@ -1,25 +1,24 @@
-<h1>Listing data</h1>
+<span class="title">Hello, user!</span>
+<ul class="data_rows">
+<%
+   from = 0
+   to = 0
 
-<table>
-  <tr>
-    <th>Content</th>
-    <th>User</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+   if params[:from]
+     from = params[:from].to_i
+   end
+   if params[:to]
+     to = params[:to].to_i
+   end
 
-<% @data.each do |datum| %>
-  <tr>
-    <td><%= datum.content %></td>
-    <td><%= datum.user_id %></td>
-    <td><%= link_to 'Show', datum %></td>
-    <td><%= link_to 'Edit', edit_datum_path(datum) %></td>
-    <td><%= link_to 'Destroy', datum, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
+   @data.slice(from..to).each do |datum| 
+
+%>
+<li class="data_row">
+  <span class="title"><%= link_to 'Data piece ' + datum.id.to_s, datum %></span>
+</li>
+  
 <% end %>
-</table>
-
 <br />
+<%= link_to 'Create a new piece of data', new_datum_path %>
 
-<%= link_to 'New Datum', new_datum_path %>
