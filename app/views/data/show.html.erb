@@ -7,7 +7,7 @@
 
 <div id="sidebar">
 <% @datum.action_list.action_types.each do |action_type| %>
-  Action Type <%= action_type %>
+  Action Type <%= Shared.count(action_type) %>
 <% end %>
 </div>  
 
