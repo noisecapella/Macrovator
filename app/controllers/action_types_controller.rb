@@ -24,7 +24,7 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new
   # GET /action_types/new.json
   def new
-    @action_type = ActionType.new
+    @action_type = ActionType.new(:action_list => ActionList.find(params[:action_list]))
 
     respond_to do |format|
       format.html # new.html.erb

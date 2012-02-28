@@ -12,7 +12,7 @@
 <% @action_types.each do |action_type| %>
   <tr>
     <td><%= action_type.action_type %></td>
-    <td><%= action_type.actionlist_id %></td>
+    <td><%= action_type.action_list.datum.title %></td>
     <td><%= link_to 'Show', action_type %></td>
     <td><%= link_to 'Edit', edit_action_type_path(action_type) %></td>
     <td><%= link_to 'Destroy', action_type, confirm: 'Are you sure?', method: :delete %></td>

@@ -41,6 +41,10 @@ class DataController < ApplicationController
   # POST /data.json
   def create
     @datum = Datum.new(params[:datum])
+    @datum.action_list = ActionList.new
+    if not @datum.action_list.save
+      raise "HELL"
+    end
 
     respond_to do |format|
       if @datum.save

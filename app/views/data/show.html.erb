@@ -2,13 +2,16 @@
 
 <div id="container">
 <div id="content">
-  <%= @datum.content %>
+<code>
+  <%= h(@datum.content).gsub("\n", "<br />").html_safe %>
+</code>
 </div>
 
 <div id="sidebar">
 <% @datum.action_list.action_types.each do |action_type| %>
-  Action Type <%= Shared.count(action_type) %>
+  Action Type <%= Shared.count(action_type) %><br />
 <% end %>
+<%= link_to 'New action', new_action_type_path(:action_list => @datum.action_list) %>
 </div>  
 
 </div>
