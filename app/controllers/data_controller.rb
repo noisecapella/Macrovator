@@ -41,22 +41,23 @@ class DataController < ApplicationController
   # POST /data.json
   def create
     @datum = Datum.new(params[:datum])
-    @datum.action_list = ActionList.new
-    if not @datum.action_list.save
-      raise "HELL"
-    end
-
+    @datum.action_list = ActionList.new(:name => "Empty")
+    @datum.action_list.datum = @datum
+    @datum.user = current_user
     respond_to do |format|
-      if @datum.save
-        format.html { redirect_to @datum, notice: 'Datum was successfully created.' }
-        format.json { render json: @datum, status: :created, location: @datum }
-      else
+      if not @datum.action_list.save
+        format.html { render action: "new" }
+        format.json { render json: @datum.action_list.errors, status: :unprocessable_entity }
+      elsif not @datum.save
         format.html { render action: "new" }
         format.json { render json: @datum.errors, status: :unprocessable_entity }
+      else
+        format.html { redirect_to @datum, notice: 'Datum was successfully created.' }
+        format.json { render json: @datum, status: :created, location: @datum }
       end
     end
   end
-
+  
   # PUT /data/1
   # PUT /data/1.json
   def update

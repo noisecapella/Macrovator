@@ -1,17 +1,10 @@
-<span class="title">Hello, user!</span>
+<span class="title">Hello, <%= current_user.name %>!</span>
 <ul class="data_rows">
 <%
-   from = 0
-   to = 10
+   from = (params[:from] || 0).to_i
+   to = (params[:to] || 10).to_i
 
-   if params[:from]
-     from = params[:from].to_i
-   end
-   if params[:to]
-     to = params[:to].to_i
-   end
-
-   @data.slice(from..to).each do |datum| 
+   @data.slice(from...to).each do |datum| 
 
 %>
 <li class="data_row">

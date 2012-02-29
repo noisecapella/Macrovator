@@ -9,7 +9,25 @@
   <b>Name:</b>
   <%= @user.name %>
 </p>
-
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Edit', edit_user_path(@user) %>
+<br /><br />
+<ul class="data_rows">Data pieces:</ul>
+<% 
+   from = (params[:from] || 0).to_i
+   to = (params[:to] || 10).to_i
+   
+   unless @user.data.empty?
+     @user.data.slice(from...to).each do |datum|
+%>
+<li class="data_row">
+  <span class="title"><%= link_to 'Data piece ' + datum.id.to_s, datum %></span>
+</li>
+<% end
+  else
+ %>
+No data
+<% end %>
+</ul>
+<p>
+<%= link_to 'Create a data piece', :controller => :data, :action => :new %>
+</p>

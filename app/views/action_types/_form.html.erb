@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label :action_type %><br />
-    <%= select(:action_type, :action_type, ActionType.all_action_types) %> 
+    <%= select(:action_type, :action_type, ActionType.mapping.map { |k,v| [ v, k]}) %> 
   </div>
   <div class="field">
     For <%= f.label :action_list_id %> <%= @action_type.action_list.name %><br />

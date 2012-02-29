@@ -3,5 +3,6 @@ class User < ActiveRecord::Base
 
   attr_accessible :name, :email, :password, :password_confirmation
   has_secure_password
-  validates_presence_of :password, :on => :create
+  validates :password, :presence => true, :length => { :minimum => 5 }
+  
 end

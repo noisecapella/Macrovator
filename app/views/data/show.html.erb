@@ -9,9 +9,9 @@
 
 <div id="sidebar">
 <% @datum.action_list.action_types.each do |action_type| %>
-  Action Type <%= action_type.name %><br />
+  Action Type <%= action_type.my_name %><br />
 <% end %>
-<%= link_to 'New action', new_action_type_path(:action_list => @datum.action_list) %>
+<%= link_to 'New action', new_action_type_path(:action_list_id =>  @datum.action_list.id) %>
 </div>  
 
 </div>
