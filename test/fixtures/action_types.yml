@@ -2,8 +2,8 @@
 
 one:
   action_type: 1
-  action_list_id: 1
+  action_list: one
 
 two:
   action_type: 2
-  action_list_id: 1
+  action_list: two

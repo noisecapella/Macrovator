@@ -8,7 +8,19 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<div id="login">
+  <% if current_user %>
+  Logged in as <%= link_to current_user.name, :controller => :users, :action => :show, :id => current_user.id %>
+  <%= link_to "Log out?", log_out_path %>
+  <% else %>
+  
+  <%= link_to "Log in?", log_in_path %>
+  <% end %>
+</div>
 <div id="wrap">
+<% flash.each do |name, msg| %>
+   <%= content_tag :div, msg, :id => "flash_#{name}" %>
+<% end %>
 <%= yield %>
 </div>
 </body>
