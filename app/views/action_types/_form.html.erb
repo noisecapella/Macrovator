@@ -13,11 +13,11 @@
 
   <div class="field">
     <%= f.label :action_type %><br />
-    <%= f.number_field :action_type %>
+    <%= select(:action_type, :action_type, ActionType.all_action_types) %> 
   </div>
   <div class="field">
-    <%= f.label :action_list_id %><br />
-    <%= f.number_field :action_list_id, :value => @action_type.action_list.id %>
+    For <%= f.label :action_list_id %> <%= @action_type.action_list.name %><br />
+    <%= f.hidden_field :action_list_id, :value => @action_type.action_list.id %>
   </div>
   <div class="actions">
     <%= f.submit %>

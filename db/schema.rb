@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20120216174117) do
 
   create_table "action_lists", :force => true do |t|
     t.integer  "datum_id"
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
