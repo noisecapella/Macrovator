@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20120216174117) do
   create_table "action_types", :force => true do |t|
     t.integer  "action_type"
     t.integer  "action_list_id"
+    t.string   "arguments"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end

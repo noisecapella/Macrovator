@@ -10,16 +10,21 @@
       </ul>
     </div>
   <% end %>
-
   <div class="field">
     <%= f.label :action_type %><br />
     <%= select(:action_type, :action_type, ActionType.mapping.map { |k,v| [ v, k]}) %> 
   </div>
   <div class="field">
-    For <%= f.label :action_list_id %> <%= @action_type.action_list.name %><br />
+    For <%= f.label :action_list_id %> <%= link_to @action_type.action_list.name, @action_type.action_list %><br />
     <%= f.hidden_field :action_list_id, :value => @action_type.action_list.id %>
   </div>
+  <% f.fields_for :arguments do |builder| %>
+    <% builder.text_field :content %>
+
+  <% end %>
+
   <div class="actions">
     <%= f.submit %>
   </div>
+
 <% end %>

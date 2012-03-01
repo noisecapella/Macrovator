@@ -7,9 +7,12 @@
 
 <p>
   <b>Action list:</b>
-  <%= @action_type.action_list.name %>
+  <%= link_to @action_type.action_list.name, @action_type.action_list %>
 </p>
 
+<p>
+  <b>Arguments:</b>
+  <%= @action_type.arguments %>
 
-<%= link_to 'Edit', edit_action_type_path(@action_type) %> |
-<%= link_to 'Back', action_types_path %>
+
+<%= link_to 'Edit', edit_action_type_path(@action_type) %>

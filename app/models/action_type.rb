@@ -3,9 +3,7 @@ class ActionType < ActiveRecord::Base
 
   attr_accessible :action_type, :action_list, :action_list_id, :action_type
 
-  #validates :action_type, :inclusion => {:in => all_keys, :message => "Invalid action type"}
 
-  # constants go here
   ACTION_SEARCH = 1
   ACTION_CUT = 2
   ACTION_PASTE = 3
@@ -13,6 +11,10 @@ class ActionType < ActiveRecord::Base
   MAPPING = {ACTION_SEARCH => "Search",
     ACTION_CUT => "Cut",
     ACTION_PASTE => "Paste"}
+
+  validates :action_type, :inclusion => {:in => MAPPING, :message => "Invalid action type"}
+  validates :action_list_id, :presence => true
+  validates :arguments, :presence => true
 
   def my_name
     MAPPING[action_type] or "Undefined"
