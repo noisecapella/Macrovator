@@ -4,7 +4,7 @@
   <title>Macrovator</title>
   <link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag :application %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -13,7 +13,7 @@
   Logged in as <%= link_to current_user.name, :controller => :users, :action => :show, :id => current_user.id %>
   <%= link_to "Log out?", log_out_path %>
   <% else %>
-  
+
   <%= link_to "Log in", log_in_path %>
   <%= link_to "Register", new_user_path %>
   <% end %>

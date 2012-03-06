@@ -1,4 +1,4 @@
-<span class="title">Hello, <%= current_user.name %>!</span>
+<span class="title"><%= if current_user then "Hello, " + current_user.name else "Welcome!" end %></span>
 <ul class="data_rows">
 <%
    from = (params[:from] || 0).to_i
