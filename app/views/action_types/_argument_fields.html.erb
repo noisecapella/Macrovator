@@ -1,14 +1,17 @@
 <div class="fields">
   <p>
     <%= f.label :key, "Argument Key" %>
-    <%= f.text_field :key %>
+    <%= f.hidden_field :key %>
+    <%= f.object.key %>
   </p>
   <p>
     <%= f.label :value, "Argument Value" %>
     <%= f.text_field :value %>
   </p>
+  <% if true %>
   <p>
     <%= f.check_box :_destroy %>
     <%= f.label :_destroy, "Remove Argument" %>
   </p>
+  <% end %>
 </div>

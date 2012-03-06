@@ -12,7 +12,7 @@
   <% end %>
   <div class="field">
     <%= f.label :action_type %><br />
-    <%= select(:action_type, :action_type, ActionType.mapping.map { |k,v| [ v, k]}) %>
+    <%= select(:action_type, :action_type, Constants::AllArguments.map  { |arg| [arg::Name, arg::Id] }, {:remote => true}) %>
   </div>
   <div class="field">
     For <%= f.label :action_list_id %> <%= link_to @action_type.action_list.name, @action_type.action_list %><br />
@@ -22,7 +22,6 @@
   <%= f.fields_for :arguments do |inner_f| %>
    <%= render "argument_fields", :f => inner_f %>
   <% end %>
-    <p><%= link_to_add_fields "Add argument", f, :arguments %></p>
 
   <div class="actions">
     <%= f.submit %>
