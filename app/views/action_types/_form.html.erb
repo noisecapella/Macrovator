@@ -12,16 +12,25 @@
   <% end %>
   <div class="field">
     <%= f.label :action_type %><br />
-    <%= select(:action_type, :action_type, Constants::AllArguments.map  { |arg| [arg::Name, arg::Id] }, {:remote => true}) %>
+    <%= select_tag :action_type_action_type,
+	options_from_collection_for_select(Constants::AllArguments, :id, :my_name),
+	:name => "action_type[action_type]",
+	:'data-remote' => 'true',
+    :'data-url' => url_for(:controller => :action_types, :action => :select_changed),
+    :'data-type' => 'html'
+	%>
+    
   </div>
   <div class="field">
     For <%= f.label :action_list_id %> <%= link_to @action_type.action_list.name, @action_type.action_list %><br />
     <%= f.hidden_field :action_list_id, :value => @action_type.action_list.id %>
   </div>
 
+  <div id="argument_fields">
   <%= f.fields_for :arguments do |inner_f| %>
-   <%= render "argument_fields", :f => inner_f %>
+   <%= render "select_changed", :f => inner_f %>
   <% end %>
+  </div>
 
   <div class="actions">
     <%= f.submit %>

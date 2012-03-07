@@ -1,0 +1,10 @@
+<%= fields_for @action_type do |f| %>
+<p>
+  <%= f.fields_for :arguments, @action_type.arguments do |argument_fields| %>
+  <%= argument_fields.label :key, argument_fields.object.key %>
+  <%= argument_fields.hidden_field :key %>
+  <%= argument_fields.text_field :value, :value => argument_fields.object.value %>
+  <% end %>
+</p>
+<% end %>
+

@@ -1,4 +1,4 @@
-class CutAction
+class CutAction < Action
   Arguments = [
               ]
   Id = 3

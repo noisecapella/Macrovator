@@ -20,10 +20,11 @@
 //    $(link).parent().append(content.replace(regexp, new_id));
 //}
 
-jQuery(function($) {
-    $("#action_type_action_type").change(function() {
-	//TODO
-
+$(document).ready(function() {
+    $("#action_type_action_type").live('ajax:success', function(evt, data, status, xhr) {
+	var fields = $('#argument_fields');
+	
+	fields.html(data);
     });
 
 });

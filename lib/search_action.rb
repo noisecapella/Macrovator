@@ -1,6 +1,6 @@
-class SearchAction
+class SearchAction < Action
   Arguments = [
-               {:key => "term", :optional => false}
+               {:key => "term", :default => "", :optional => false}
               ]
   Id = 1
   Name = "Search"

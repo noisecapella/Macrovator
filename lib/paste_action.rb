@@ -1,4 +1,4 @@
-class PasteAction
+class PasteAction < Action
   Arguments = [
               ]
   Id = 2

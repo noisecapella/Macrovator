@@ -6,15 +6,17 @@ Site::Application.routes.draw do
 
   resources :action_lists
 
-  resources :action_types
+  resources :action_types do
+    member do
+      get 'select_changed'
+    end
+  end
 
   resources :actions
 
   resources :users
 
   resources :data
-
-  resources :ideas
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

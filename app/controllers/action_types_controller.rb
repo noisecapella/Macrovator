@@ -80,4 +80,24 @@ class ActionTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def select_changed
+    @action_type = ActionType.find(params[:id])
+    action_type_id = params[:action_type][:action_type]
+    arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments
+
+    # create temporary arguments to contain data and create fields
+    arguments = @arguments_list.map do |pair| 
+      Argument.new(:key => pair[:key], :value => pair[:default_value])
+    end
+
+    # note that this isn't saved here
+    @action_type.arguments = arguments
+
+    respond_to do |format|
+      format.html {
+        render :partial => true
+      }
+    end
+  end
 end
