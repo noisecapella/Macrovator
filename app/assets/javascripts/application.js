@@ -12,7 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+
+
+//  sdf= require_tree .
 
 //function add_fields(link, association, content) {
 //    var new_id = new Date().getTime();

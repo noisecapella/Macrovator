@@ -24,7 +24,8 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new
   # GET /action_types/new.json
   def new
-    @action_type = ActionType.new(:action_list => ActionList.find(params[:action_list_id]))
+    @action_list = ActionList.find(params[:action_list_id])
+    @action_type = ActionType.new(:action_list => @action_list)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -82,9 +83,8 @@ class ActionTypesController < ApplicationController
   end
 
   def select_changed
-    @action_type = ActionType.find(params[:id])
     action_type_id = params[:action_type][:action_type]
-    arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments
+    @arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments
 
     # create temporary arguments to contain data and create fields
     arguments = @arguments_list.map do |pair| 
@@ -92,7 +92,11 @@ class ActionTypesController < ApplicationController
     end
 
     # note that this isn't saved here
-    @action_type.arguments = arguments
+    @action_type = ActionType.find_by_id(params[:id])
+    if @action_type.nil?
+      @action_type = ActionType.new(:id => params[:id])
+      @action_type.arguments = arguments
+    end
 
     respond_to do |format|
       format.html {

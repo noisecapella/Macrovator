@@ -16,7 +16,7 @@
 	options_from_collection_for_select(Constants::AllArguments, :id, :my_name),
 	:name => "action_type[action_type]",
 	:'data-remote' => 'true',
-    :'data-url' => url_for(:controller => :action_types, :action => :select_changed),
+    :'data-url' => url_for(:controller => :action_types, :action => :select_changed, :id => @action_list.id),
     :'data-type' => 'html'
 	%>
     
