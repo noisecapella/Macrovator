@@ -27,9 +27,7 @@
   </div>
 
   <div id="argument_fields">
-  <%= f.fields_for :arguments do |inner_f| %>
-   <%= render "select_changed", :f => inner_f %>
-  <% end %>
+ <%= render "select_changed" %>
   </div>
 
   <div class="actions">
