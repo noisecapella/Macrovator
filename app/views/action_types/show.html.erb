@@ -12,7 +12,10 @@
 
 <p>
   <b>Arguments:</b>
-  <%= @action_type.arguments %>
+<% for argument in @action_type.arguments %>
+  <p><b><%= argument.key.capitalize %></b>: <%= argument.value %><p>
+<% end %>
 
-
+<p>
 <%= link_to 'Edit', edit_action_type_path(@action_type) %>
+</p>

@@ -1,5 +1,9 @@
 <p id="notice"><%= notice %></p>
-
+<% for action_type in @action_list.action_types %>
+<p>
+<%= link_to action_type.my_name, action_type %>
+</p>
+<% end %>
 
 <%= link_to 'Edit', edit_action_list_path(@action_list) %> |
 <%= link_to 'Back', action_lists_path %>

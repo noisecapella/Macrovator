@@ -3,5 +3,9 @@ class CutAction < Action
               ]
   Id = 3
   Name = "Cut"
+
+  def self.do_describe(args)
+    Name
+  end
 end
 

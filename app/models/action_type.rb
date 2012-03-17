@@ -10,6 +10,13 @@ class ActionType < ActiveRecord::Base
   #validates :arguments, :presence => true
 
   def my_name
-    Constants::ActionMap[action_type] or "Undefined"
+    action = Constants::ActionMap[action_type]
+    action ? action.to_s : "Undefined"
+  end
+
+  def description
+    action = Constants::ActionMap[action_type]
+    action ? action.describe(arguments) : "Undefined"
+    
   end
 end

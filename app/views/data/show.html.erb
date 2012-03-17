@@ -4,16 +4,24 @@
 <div id="container">
 
 <div id="content">
-<code>
   <%= h(@datum.content).gsub("\n", "<br />").html_safe %>
-</code>
 </div>
 
 <div id="sidebar">
+<b>Action Types</b><br />
 <% @datum.action_list.action_types.each do |action_type| %>
-  Action Type <%= link_to action_type.my_name, action_type %><br />
+  <%= link_to action_type.description, action_type %><br />
 <% end %>
+<p>
 <%= link_to 'New action', new_action_type_path(:action_list_id =>  @datum.action_list.id) %>
+
+</p>
+
+<% if @datum.action_list.action_types.length > 0 %>
+<p>
+<%= link_to "Execute one at a time", url_for(:controller => :action_type, :action => :execute, :id => @datum.action_list.action_types.first.id), :remote => true, :id => "execute_link" %>
+</p>
+<% end %>
 </div>  
 
 </div>

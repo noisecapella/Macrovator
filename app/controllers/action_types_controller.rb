@@ -104,6 +104,14 @@ class ActionTypesController < ApplicationController
     end
   end
 
+  def execute
+    
+    respond_to do |format|
+      format.json {
+        render
+      }
+  end
+
   private
   def populate_arguments(action_type_id)
     arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments

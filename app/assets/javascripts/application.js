@@ -24,9 +24,15 @@
 
 $(document).ready(function() {
     $("#action_type_action_type").live('ajax:success', function(evt, data, status, xhr) {
-	var fields = $('#argument_fields');
+	    var fields = $('#argument_fields');
 	
-	fields.html(data);
-    });
+	    fields.html(data);
+	});
 
+
+    $("#execute_link").live("ajax:success", function(evt, data, status, xhr) {
+	    var content = $('#content');
+	   
+	    content.html(data);
+	});
 });

@@ -10,6 +10,9 @@ Site::Application.routes.draw do
     member do
       get 'select_changed'
     end
+    member do
+      get 'execute'
+    end
   end
 
   resources :actions
