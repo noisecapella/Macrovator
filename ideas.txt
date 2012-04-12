@@ -1,0 +1,20 @@
+user has link to currently executing macro
+when execute link is pressed:
+- go to action_type.execute
+- if no current user, fail
+- if user.current_action_list is not this one, make it so and reset user.current_action_list_index, user.temp_current_data
+- if index out of range, reset to 0
+- execute action based on command
+- increment index
+
+data should include:
+original data as text block
+link to action list
+
+user should include:
+temp_current_data
+current_data_item
+current_action_list
+current_action_list_index
+
+
