@@ -108,8 +108,9 @@ class ActionTypesController < ApplicationController
     
     respond_to do |format|
       format.json {
-        render
+        render :partial => "execute.js.erb"
       }
+    end
   end
 
   private

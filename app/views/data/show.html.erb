@@ -19,7 +19,7 @@
 
 <% if @datum.action_list.action_types.length > 0 %>
 <p>
-<%= link_to "Execute one at a time", url_for(:controller => :action_type, :action => :execute, :id => @datum.action_list.action_types.first.id), :remote => true, :id => "execute_link" %>
+<%= link_to "Execute one at a time", url_for(:controller => :action_types, :action => :execute, :id => @datum.action_list.action_types.first.id), :remote => true, :id => "execute_link" %>
 </p>
 <% end %>
 </div>  
