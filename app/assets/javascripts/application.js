@@ -32,6 +32,7 @@ $(document).ready(function() {
 
     $("#execute_link").live("ajax:success", function(evt, data, status, xhr) {
 	    alert("success");
+	    alert(data);
 	    var content = $('#content');
 	   
 	    content.html(data);

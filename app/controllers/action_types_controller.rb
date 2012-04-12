@@ -105,7 +105,10 @@ class ActionTypesController < ApplicationController
   end
 
   def execute
+    action_type_id = params[:action_type][:action_type]
+
     
+
     respond_to do |format|
       format.json {
         render :partial => "execute.js.erb"
