@@ -105,9 +105,13 @@ class ActionTypesController < ApplicationController
   end
 
   def execute
-    action_type_id = params[:action_type][:action_type]
+    action_list_id = params[:id]
 
-    
+    if current_user.current_action_list.nil? or current_user.current_action_list.id != action_list_id
+      current_user.current_action_list = ActionList.find_by_id(action_list_id)
+      current_user.current_action_list_index = 0
+      current_user.temp_current_data = nil
+    end
 
     respond_to do |format|
       format.json {
