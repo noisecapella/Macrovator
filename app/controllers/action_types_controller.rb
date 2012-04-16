@@ -93,7 +93,7 @@ class ActionTypesController < ApplicationController
     @action_type = ActionType.find_by_id(params[:id])
     if @action_type.nil?
       @action_type = ActionType.new(:id => params[:id],
-                                    :action_type => SearchAction::Id)
+                                    :action_type => action_type_id)
       @action_type.arguments = populate_arguments(@action_type.action_type)
     end
 
