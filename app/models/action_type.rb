@@ -19,4 +19,9 @@ class ActionType < ActiveRecord::Base
     action ? action.describe(arguments) : "Undefined"
     
   end
+
+  def process(user, args)
+    action = Constants::ActionMap[action_type]
+    action.process(user, args)
+  end
 end

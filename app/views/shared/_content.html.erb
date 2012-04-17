@@ -1,0 +1,17 @@
+<% if @content.nil? or @content.empty?
+   @content = "ERROR: no content"
+end
+%>
+
+<%=
+   if @highlight_length == 0
+ h(@content).gsub("\n", "<br />").html_safe
+else
+   start = h(@content[0...@highlight_start])
+   middle = h(@content[@highlight_start...(@highlight_start+@highlight_length)])
+   last = h(@content[(@highlight_start+@highlight_length)..-1])
+   
+   display_content = start + "X<span class='highlight'>" + middle + "</span>" + last
+   display_content.gsub("\n", "<br />").html_safe
+end
+ %>

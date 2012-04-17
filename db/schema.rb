@@ -54,8 +54,13 @@ ActiveRecord::Schema.define(:version => 20120302214743) do
     t.string   "email"
     t.string   "name"
     t.string   "password_digest"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.integer  "temp_highlight_start"
+    t.integer  "temp_highlight_length"
+    t.integer  "current_action_list_id"
+    t.integer  "current_action_list_index"
+    t.string   "temp_current_data"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
 end

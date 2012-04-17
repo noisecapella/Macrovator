@@ -107,17 +107,32 @@ class ActionTypesController < ApplicationController
   def execute
     action_list_id = params[:id]
 
-    if current_user.current_action_list.nil? or current_user.current_action_list.id != action_list_id
-      current_user.current_action_list = ActionList.find_by_id(action_list_id)
+    if current_user.current_action_list.nil? or current_user.current_action_list.id != action_list_id or current.temp_current_data.nil?
+      current_user.current_action_list_id = action_list_id
       current_user.current_action_list_index = 0
-      current_user.temp_current_data = nil
+      current_user.temp_current_data = current_user.current_action_list.datum.content
+      current_user.temp_highlight_start = 0
+      current_user.temp_highlight_length = 0
     end
 
-    respond_to do |format|
-      format.json {
-        render :partial => "execute.js.erb"
-      }
+    current_action_list = current_user.current_action_list
+
+    if current_user.current_action_list_index >= current_action_list.action_types.count
+      current_user.current_action_list_index = 0
+      current_user.temp_current_data = current_user.current_action_list.datum.content
+    else
+      current_action_type = current_action_list.action_types[current_user.current_action_list_index]
+      result = current_action_type.process(current_user, current_action_type.arguments)
+      if result == :success or result == :failure # else it's :error
+        current_user.current_action_list_index += 1
+      end
     end
+
+    @content = current_user.temp_current_data
+    @highlight_start = current_user.temp_highlight_start
+    @highlight_length = current_user.temp_highlight_length
+
+    render :partial => "shared/content"
   end
 
   private

@@ -4,7 +4,7 @@
 <div id="container">
 
 <div id="content">
-  <%= h(@datum.content).gsub("\n", "<br />").html_safe %>
+  <%= render "shared/content" %>
 </div>
 
 <div id="sidebar">

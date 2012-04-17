@@ -15,6 +15,16 @@ class DataController < ApplicationController
   def show
     @datum = Datum.find(params[:id])
 
+    if not current_user.nil? and @datum.action_list.id == current_user.current_action_list_id
+      @content = current_user.temp_current_data
+      @highlight_start = current_user.temp_highlight_start
+      @highlight_length = current_user.temp_highlight_length
+    else
+      @content = @datum.content
+      @highlight_start = 0
+      @highlight_length = 0
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @datum }

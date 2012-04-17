@@ -27,4 +27,11 @@ class Action
     self.do_describe(args)
   end
 
+  def self.process(user, args)
+    result = self.do_process(user, args)
+    if result != :success or result != :failure
+      result = :error
+    end
+    result
+  end
 end
