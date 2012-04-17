@@ -3,8 +3,11 @@
 <span class="title"><%= link_to @datum.user.name, @datum.user %>'s data piece</span>
 <div id="container">
 
+<div id="info">
+  <%= render "shared/display_info" %>
+</div>
 <div id="content">
-  <%= render "shared/content" %>
+  <%= render "shared/display_content" %>
 </div>
 
 <div id="sidebar">

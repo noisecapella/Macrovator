@@ -117,7 +117,7 @@ class ActionTypesController < ApplicationController
 
     current_action_list = current_user.current_action_list
 
-    if current_user.current_action_list_index >= current_action_list.action_types.count
+    if current_user.current_action_list_index.nil? or current_user.current_action_list_index >= current_action_list.action_types.count
       current_user.current_action_list_index = 0
       current_user.temp_current_data = current_user.current_action_list.datum.content
     else
@@ -132,7 +132,16 @@ class ActionTypesController < ApplicationController
     @highlight_start = current_user.temp_highlight_start
     @highlight_length = current_user.temp_highlight_length
 
-    render :partial => "shared/content"
+    print "CONTENT: " + @content.to_s + "\nhighlight_length: " + @highlight_length.to_s
+
+    respond_to do |format|
+      format.json {
+        #x = (render :json => {"info" => "INFO", "content" => "CONTENT"})
+        x = (render :partial => "shared/content")
+        print "PARTIAL" + x.to_s + "ENDPARTIAL"
+        x
+      }
+    end
   end
 
   private

@@ -29,7 +29,7 @@ class Action
 
   def self.process(user, args)
     result = self.do_process(user, args)
-    if result != :success or result != :failure
+    if result != :success and result != :failure
       result = :error
     end
     result
