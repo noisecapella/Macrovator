@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  current_action_list_index: 1
+  current_action_list_id: 1
+  temp_current_data: MyText
+  temp_highlight_start: 1
+  temp_highlight_length: 1
+
+two:
+  current_action_list_index: 1
+  current_action_list_id: 1
+  temp_current_data: MyText
+  temp_highlight_start: 1
+  temp_highlight_length: 1

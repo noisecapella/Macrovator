@@ -49,13 +49,18 @@ class UsersController < ApplicationController
         format.html { redirect_to @user }
       else
         @user = User.new(params[:user])
-        
-        if @user.save
-          format.html { redirect_to @user, notice: 'User was successfully created.' }
-          format.json { render json: @user, status: :created, location: @user }
-        else
+        @user.user_state = UserState.new
+        @user.user_state.user = @user
+
+        if not @user.user_state.save
+          format.html { render action: "new" }
+          format.json { render json: @user.user_state.errors, status: :unprocessable_entity }
+        elsif not @user.save
           format.html { render action: "new" }
           format.json { render json: @user.errors, status: :unprocessable_entity }
+        else
+          format.html { redirect_to @user, notice: 'User was successfully created.' }
+          format.json { render json: @user, status: :created, location: @user }
         end
       end
     end

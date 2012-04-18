@@ -84,13 +84,18 @@ class ActionListsController < ApplicationController
   def reset
     @action_list = ActionList.find(params[:id])
 
-    current_user.current_action_list_id = @action_list.id
-    current_user.current_action_list_index = 0
-    current_user.temp_current_data = nil
-    current_user.temp_highlight_start = 0
-    current_user.temp_highlight_length = 0
+    user_state = current_user.user_state
+    
+    user_state.current_action_list_id = @action_list.id
+    user_state.current_action_list_index = 0
+    user_state.temp_current_data = nil
+    user_state.temp_highlight_start = 0
+    user_state.temp_highlight_length = 0
 
-    current_user.save
+    notice = nil
+    if not user_state.save
+      notice = user_state.errors.full_messages.join("\n")
+    end
 
     @content = @action_list.datum.content
     @highlight_start = 0
@@ -98,7 +103,7 @@ class ActionListsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render :partial => "shared/content"
+        render :partial => "shared/content", :notice => notice
       }
     end
   end

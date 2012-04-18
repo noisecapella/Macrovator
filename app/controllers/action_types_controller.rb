@@ -110,34 +110,40 @@ class ActionTypesController < ApplicationController
   def execute
     action_list_id = params[:id]
 
-    if current_user.current_action_list.nil? or current_user.current_action_list.id != action_list_id or current.temp_current_data.nil?
-      current_user.current_action_list_id = action_list_id
-      current_user.current_action_list_index = 0
-      current_user.temp_current_data = current_user.current_action_list.datum.content
-      current_user.temp_highlight_start = 0
-      current_user.temp_highlight_length = 0
+    user_state = current_user.user_state
+    if user_state.current_action_list.nil? or user_state.current_action_list.id != action_list_id or current.temp_current_data.nil?
+      user_state.current_action_list_id = action_list_id
+      user_state.current_action_list_index = 0
+      user_state.temp_current_data = user_state.current_action_list.datum.content
+      user_state.temp_highlight_start = 0
+      user_state.temp_highlight_length = 0
     end
 
-    current_action_list = current_user.current_action_list
+    current_action_list = user_state.current_action_list
 
-    if current_user.current_action_list_index.nil? or current_user.current_action_list_index >= current_action_list.action_types.count
-      current_user.current_action_list_index = 0
-      current_user.temp_current_data = current_user.current_action_list.datum.content
+    if user_state.current_action_list_index.nil? or user_state.current_action_list_index >= current_action_list.action_types.count
+      user_state.current_action_list_index = 0
+      user_state.temp_current_data = user_state.current_action_list.datum.content
     else
-      current_action_type = current_action_list.action_types[current_user.current_action_list_index]
+      current_action_type = current_action_list.action_types[user_state.current_action_list_index]
       result = current_action_type.process(current_user, current_action_type.arguments)
       if result == :success or result == :failure # else it's :error
-        current_user.current_action_list_index += 1
+        user_state.current_action_list_index += 1
       end
     end
 
-    @content = current_user.temp_current_data
-    @highlight_start = current_user.temp_highlight_start
-    @highlight_length = current_user.temp_highlight_length
+    @content = user_state.temp_current_data
+    @highlight_start = user_state.temp_highlight_start
+    @highlight_length = user_state.temp_highlight_length
+
+    notice = nil
+    if not user_state.save
+      notice = user_state.errors.full_messages.join("\n")
+    end
 
     respond_to do |format|
       format.json {
-        render :partial => "shared/content"
+        render :partial => "shared/content", :notice => notice
       }
     end
   end

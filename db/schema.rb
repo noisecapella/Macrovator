@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120302214743) do
+ActiveRecord::Schema.define(:version => 20120418035537) do
 
   create_table "action_lists", :force => true do |t|
     t.integer  "datum_id"
@@ -50,17 +50,22 @@ ActiveRecord::Schema.define(:version => 20120302214743) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "user_states", :force => true do |t|
+    t.integer  "current_action_list_index"
+    t.integer  "current_action_list_id"
+    t.text     "temp_current_data"
+    t.integer  "temp_highlight_start"
+    t.integer  "temp_highlight_length"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "name"
     t.string   "password_digest"
-    t.integer  "temp_highlight_start"
-    t.integer  "temp_highlight_length"
-    t.integer  "current_action_list_id"
-    t.integer  "current_action_list_index"
-    t.string   "temp_current_data"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
 end
