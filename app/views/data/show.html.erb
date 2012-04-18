@@ -11,36 +11,8 @@
 </div>
 
 <div id="sidebar">
-<b>Action Types</b><br />
-<% 
-user_state = current_user.user_state
 
-action_types = @datum.action_list.action_types
-0.until(action_types.count) do |i|
-   action_type = action_types[i] 
-   selected = user_state.current_action_list_id == @datum.action_list.id and user_state.current_action_list_index == i
- %>
-<%= "<span class='selected'>" if selected %>
-   <%= link_to action_type.description, action_type %><br />
-<%= "</span" if selected %>
-<% end %>
-
-<% @datum.action_list.action_types.each do |action_type| %>
-  <%= link_to action_type.description, action_type %><br />
-<% end %>
-<p>
-<%= link_to 'New action', new_action_type_path(:action_list_id =>  @datum.action_list.id) %>
-
-</p>
-
-<% if @datum.action_list.action_types.length > 0 %>
-<p>
-<%= link_to "Execute one at a time", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
-</p>
-<p>
-<%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected" %>
-</p>
-<% end %>
+  <%= render "shared/sidebar" %>
 </div>  
 
 </div>

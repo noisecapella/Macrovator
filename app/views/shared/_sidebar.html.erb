@@ -1,0 +1,27 @@
+<b>Action Types</b><br />
+<% 
+user_state = current_user.user_state
+
+action_types = @datum.action_list.action_types
+action_types.count.times do |i|
+   action_type = action_types[i] 
+   selected = (user_state.current_action_list_id == @datum.action_list.id and user_state.current_action_list_index == i + 1)
+ %>
+<%= ("<span class='selected'>" if selected).to_s.html_safe %>
+   <%= link_to action_type.description, action_type %><br />
+<%= ("</span>" if selected).to_s.html_safe %>
+<% end %>
+
+<p>
+<%= link_to 'New action', new_action_type_path(:action_list_id =>  @datum.action_list.id) %>
+
+</p>
+
+<% if @datum.action_list.action_types.length > 0 %>
+<p>
+<%= link_to "Execute one at a time", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
+</p>
+<p>
+<%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected" %>
+</p>
+<% end %>

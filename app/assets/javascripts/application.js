@@ -28,6 +28,9 @@ function update_content(data) {
 
     var info = $('#info');
     info.html(data["info"]);
+
+    var sidebar = $('#sidebar');
+    sidebar.html(data["sidebar"]);
 }
 
 $(document).ready(function() {

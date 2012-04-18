@@ -61,3 +61,8 @@ li
 {
     background-color: #ffff40;
 }
+
+.selected
+{
+    font-weight: bold;
+}

@@ -1,4 +1,8 @@
-<%= {"content" => (render :partial => "shared/display_content", :formats => ["html"]),
-            "info" => (render :partial => "shared/display_info", :formats => ["html"])	
+<%= 
+@datum = current_user.user_state.current_action_list.datum
+
+{"content" => (render :partial => "shared/display_content", :formats => ["html"]),
+            "info" => (render :partial => "shared/display_info", :formats => ["html"]),
+	    "sidebar" => (render :partial => "shared/sidebar", :formats => ["html"])
 }.to_json.html_safe
 %>
