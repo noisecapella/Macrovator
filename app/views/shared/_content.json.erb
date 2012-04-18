@@ -1,13 +1,4 @@
-<% if @content.nil? or @content.empty?
-   @content = "ERROR: no content"
-end
-print "HERE"
+<%= {"content" => (render :partial => "shared/display_content", :formats => ["html"]),
+            "info" => (render :partial => "shared/display_info", :formats => ["html"])	
+}.to_json.html_safe
 %>
-{"content":"<%=
-x = (render :partial => "shared/display_content", :formats => [:html])
-x.to_json
- %>", 
-"info": "<%=
-x = (render :partial => "shared/display_info", :formats => [:html])
-x.to_json
-%>"}

@@ -80,4 +80,26 @@ class ActionListsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def reset
+    @action_list = ActionList.find(params[:id])
+
+    current_user.current_action_list_id = @action_list.id
+    current_user.current_action_list_index = 0
+    current_user.temp_current_data = nil
+    current_user.temp_highlight_start = 0
+    current_user.temp_highlight_length = 0
+
+    current_user.save
+
+    @content = @action_list.datum.content
+    @highlight_start = 0
+    @highlight_length = 0
+
+    respond_to do |format|
+      format.json {
+        render :partial => "shared/content"
+      }
+    end
+  end
 end

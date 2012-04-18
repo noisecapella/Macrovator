@@ -4,7 +4,11 @@ Site::Application.routes.draw do
   root :to => "users#new"
   resources :sessions
 
-  resources :action_lists
+  resources :action_lists do
+    member do
+      get 'reset'
+    end
+  end
 
   resources :action_types do
     member do

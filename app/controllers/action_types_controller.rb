@@ -87,13 +87,16 @@ class ActionTypesController < ApplicationController
   end
 
   def select_changed
-    action_type_id = params[:action_type][:action_type]
+    action_type_type = params[:action_type][:action_type]
+    action_type_id = params[:action_type][:action_type_id]
 
     # note that this isn't saved here
-    @action_type = ActionType.find_by_id(params[:id])
-    if @action_type.nil?
-      @action_type = ActionType.new(:id => params[:id],
-                                    :action_type => action_type_id)
+    @action_list = ActionList.find_by_id(params[:id])
+    @action_type = ActionType.find_by_id(action_type_id)
+    
+    if @action_list.nil? or @action_type.nil?
+      @action_type = ActionType.new(:action_type => action_type_type)
+      @action_type.action_list = @action_list
       @action_type.arguments = populate_arguments(@action_type.action_type)
     end
 
@@ -132,14 +135,9 @@ class ActionTypesController < ApplicationController
     @highlight_start = current_user.temp_highlight_start
     @highlight_length = current_user.temp_highlight_length
 
-    print "CONTENT: " + @content.to_s + "\nhighlight_length: " + @highlight_length.to_s
-
     respond_to do |format|
       format.json {
-        #x = (render :json => {"info" => "INFO", "content" => "CONTENT"})
-        x = (render :partial => "shared/content")
-        print "PARTIAL" + x.to_s + "ENDPARTIAL"
-        x
+        render :partial => "shared/content"
       }
     end
   end

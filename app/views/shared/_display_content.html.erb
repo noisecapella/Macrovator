@@ -1,7 +1,6 @@
 <% if @content.nil? or @content.empty?
    @content = "ERROR: no content"
 end
-print "YYYYYY"
 %>
 <%=
    print @highlight_length.to_s
@@ -14,7 +13,5 @@ else
    
    display_content = start + "<span class='highlight'>" + middle + "</span>" + last
    display_content.gsub("\n", "<br />").html_safe
-
-   print "ZZZZZ" + display_content.to_s + "XXXZZZ"
 end
  %>
