@@ -9,18 +9,18 @@ class SearchAction < Action
     "Search for '" + args.first.value.to_s + "'"
   end
 
-  def self.do_process(user, args)
+  def self.do_process(user_state, args)
     key = args.first.value.to_s
-    data = user.temp_current_data
+    data = user_state.temp_current_data
 
-    index = data.index(key, user.temp_highlight_start)
+    index = data.index(key, user_state.temp_highlight_start)
     if index.nil?
-      user.temp_highlight_start = 0
-      user.temp_highlight_length = 0
+      user_state.temp_highlight_start = 0
+      user_state.temp_highlight_length = 0
       :failure
     else
-      user.temp_highlight_start = index
-      user.temp_highlight_length = key.length
+      user_state.temp_highlight_start = index
+      user_state.temp_highlight_length = key.length
       :success
     end
   end

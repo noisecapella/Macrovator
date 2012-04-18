@@ -5,6 +5,9 @@ class UserState < ActiveRecord::Base
   attr_accessible :temp_current_data
   attr_accessible :temp_highlight_start, :temp_highlight_length
 
+  attr_accessible :user
+
+  validates :user, :presence => true
 
   def current_action_list
     ActionList.find_by_id(current_action_list_id)

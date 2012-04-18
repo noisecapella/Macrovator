@@ -7,6 +7,8 @@ class CreateUserStates < ActiveRecord::Migration
       t.integer :temp_highlight_start
       t.integer :temp_highlight_length
 
+      t.integer :user_id
+
       t.timestamps
     end
   end

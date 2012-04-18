@@ -126,7 +126,7 @@ class ActionTypesController < ApplicationController
       user_state.temp_current_data = user_state.current_action_list.datum.content
     else
       current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-      result = current_action_type.process(current_user, current_action_type.arguments)
+      result = current_action_type.process(user_state, current_action_type.arguments)
       if result == :success or result == :failure # else it's :error
         user_state.current_action_list_index += 1
       end

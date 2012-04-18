@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   has_one :user_state
 
   attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :user_state
 
   has_secure_password
   validates :password, :presence => true, :length => { :minimum => 5 }

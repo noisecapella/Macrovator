@@ -27,8 +27,8 @@ class Action
     self.do_describe(args)
   end
 
-  def self.process(user, args)
-    result = self.do_process(user, args)
+  def self.process(user_state, args)
+    result = self.do_process(user_state, args)
     if result != :success and result != :failure
       result = :error
     end

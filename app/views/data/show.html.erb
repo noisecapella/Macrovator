@@ -13,10 +13,12 @@
 <div id="sidebar">
 <b>Action Types</b><br />
 <% 
+user_state = current_user.user_state
+
 action_types = @datum.action_list.action_types
 0.until(action_types.count) do |i|
    action_type = action_types[i] 
-   selected = current_user.current_action_list_id == @datum.action_list.id and current_user.current_action_list_index == i
+   selected = user_state.current_action_list_id == @datum.action_list.id and user_state.current_action_list_index == i
  %>
 <%= "<span class='selected'>" if selected %>
    <%= link_to action_type.description, action_type %><br />

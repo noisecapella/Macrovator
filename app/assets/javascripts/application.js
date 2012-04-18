@@ -32,7 +32,6 @@ function update_content(data) {
 
 $(document).ready(function() {
     $("#action_type_action_type").live('ajax:success', function(evt, data, status, xhr) {
-	alert("change" + data);
 	    var fields = $('#argument_fields');
 	
 	    fields.html(data);

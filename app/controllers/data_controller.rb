@@ -15,10 +15,12 @@ class DataController < ApplicationController
   def show
     @datum = Datum.find(params[:id])
 
-    if not current_user.nil? and @datum.action_list.id == current_user.current_action_list_id
-      @content = current_user.temp_current_data
-      @highlight_start = current_user.temp_highlight_start
-      @highlight_length = current_user.temp_highlight_length
+    user_state = current_user.user_state
+
+    if not current_user.nil? and @datum.action_list.id == user_state.current_action_list_id
+      @content = user_state.temp_current_data
+      @highlight_start = user_state.temp_highlight_start
+      @highlight_length = user_state.temp_highlight_length
     else
       @content = @datum.content
       @highlight_start = 0

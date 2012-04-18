@@ -44,14 +44,14 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    @user = User.new(params[:user])
+    @user.user_state = UserState.new
+    @user.user_state.user = @user
+
     respond_to do |format|
       if @current_user
         format.html { redirect_to @user }
       else
-        @user = User.new(params[:user])
-        @user.user_state = UserState.new
-        @user.user_state.user = @user
-
         if not @user.user_state.save
           format.html { render action: "new" }
           format.json { render json: @user.user_state.errors, status: :unprocessable_entity }
