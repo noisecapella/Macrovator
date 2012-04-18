@@ -107,46 +107,7 @@ class ActionTypesController < ApplicationController
     end
   end
 
-  def execute
-    action_list_id = params[:id]
 
-    user_state = current_user.user_state
-    if user_state.current_action_list.nil? or user_state.current_action_list.id != action_list_id or current.temp_current_data.nil?
-      user_state.current_action_list_id = action_list_id
-      user_state.current_action_list_index = 0
-      user_state.temp_current_data = user_state.current_action_list.datum.content
-      user_state.temp_highlight_start = 0
-      user_state.temp_highlight_length = 0
-    end
-
-    current_action_list = user_state.current_action_list
-
-    if user_state.current_action_list_index.nil? or user_state.current_action_list_index >= current_action_list.action_types.count
-      user_state.current_action_list_index = 0
-      user_state.temp_current_data = user_state.current_action_list.datum.content
-    else
-      current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-      result = current_action_type.process(user_state, current_action_type.arguments)
-      if result == :success or result == :failure # else it's :error
-        user_state.current_action_list_index += 1
-      end
-    end
-
-    @content = user_state.temp_current_data
-    @highlight_start = user_state.temp_highlight_start
-    @highlight_length = user_state.temp_highlight_length
-
-    notice = nil
-    if not user_state.save
-      notice = user_state.errors.full_messages.join("\n")
-    end
-
-    respond_to do |format|
-      format.json {
-        render :partial => "shared/content", :notice => notice
-      }
-    end
-  end
 
   private
   def populate_arguments(action_type_id)

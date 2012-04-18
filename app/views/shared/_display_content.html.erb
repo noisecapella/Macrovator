@@ -3,7 +3,6 @@
 end
 %>
 <%=
-   print @highlight_length.to_s
    if @highlight_length == 0
  h(@content).gsub("\n", "<br />").html_safe
 else
@@ -13,7 +12,6 @@ else
    
    display_content = start + "<span class='highlight'>".html_safe + middle + "</span>".html_safe + last
    display_content = display_content.gsub("\n", "<br />").html_safe
-   print "DISPLAY" + display_content
    display_content
 end
  %>

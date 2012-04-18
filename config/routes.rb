@@ -8,14 +8,14 @@ Site::Application.routes.draw do
     member do
       get 'reset'
     end
+    member do
+      get 'execute'
+    end
   end
 
   resources :action_types do
     member do
       get 'select_changed'
-    end
-    member do
-      get 'execute'
     end
   end
 

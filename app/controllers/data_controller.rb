@@ -17,7 +17,7 @@ class DataController < ApplicationController
 
     user_state = current_user.user_state
 
-    if not current_user.nil? and @datum.action_list.id == user_state.current_action_list_id
+    if not current_user.nil? and @datum.action_list.id == user_state.current_action_list_id and not user_state.temp_current_data.nil?
       @content = user_state.temp_current_data
       @highlight_start = user_state.temp_highlight_start
       @highlight_length = user_state.temp_highlight_length
