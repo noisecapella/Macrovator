@@ -20,11 +20,16 @@ $total_width: 800px;
 	border-radius: $border_radius;
 	-moz-border-radius: $border_radius;
 
-	height: 450px;
+	height: 700px;
 	overflow: auto;
 
 	width: 0.6 * $total_width;
 	float: left;
+}
+
+#textarea_content
+{
+	width: 0.5 * $total_width;
 }
 
 #sidebar

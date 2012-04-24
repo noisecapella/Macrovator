@@ -110,17 +110,22 @@ class ActionListsController < ApplicationController
     user_state = current_user.user_state
 
     if user_state.invalid?
-      user_state.reset(action_list_id)
+      user_state.reset_count(action_list_id)
     else
       if not user_state.in_progress?
-        user_state.reset(action_list_id)
+        user_state.reset_count(action_list_id)
       end
 
       current_action_list = user_state.current_action_list
       
       current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-      result = current_action_type.process(user_state, current_action_type.arguments)
-      if result == :success or result == :failure # else it's :error
+
+      begin
+        current_action_type.process(user_state, current_action_type.arguments)
+      rescue RuntimeError => e
+        @errors = "Error: " + e.to_s
+        user_state.current_action_list_index = 0
+      else
         user_state.current_action_list_index += 1
       end
     end
@@ -128,6 +133,8 @@ class ActionListsController < ApplicationController
     @content = user_state.temp_current_data
     @highlight_start = user_state.temp_highlight_start
     @highlight_length = user_state.temp_highlight_length
+    @current_position = user_state.current_position
+    @last_mark_position = user_state.last_mark_position
 
     notice = nil
     if not user_state.save

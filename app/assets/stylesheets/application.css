@@ -33,11 +33,6 @@ body {
 
 }
 
-#container
-{
-
-}
-
 strong {
     color: #FFD073;
 }
@@ -60,6 +55,19 @@ li
 .highlight
 {
     background-color: #ffff40;
+}
+
+.mark
+{
+    color: red;
+}
+
+.cursor
+{
+    padding-left: 0px;
+    border-left: 1px solid black;
+    font-weight: bold;
+    display: inline-block!important;
 }
 
 .selected

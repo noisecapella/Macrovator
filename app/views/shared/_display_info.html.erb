@@ -3,6 +3,7 @@
 end
 %>
 <%=
-"highlight_length = " + @highlight_length.to_s + ", index = " + current_user.user_state.current_action_list_index.to_s
+
+("highlight_length = " + h(@highlight_length.to_s) + ", index = " + h(current_user.user_state.current_action_list_index.to_s) + ", position: " + h(current_user.user_state.current_position.to_s) + "<br />" + h(@errors.to_s)).html_safe
 
 %>

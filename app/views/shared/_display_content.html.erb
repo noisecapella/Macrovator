@@ -3,15 +3,22 @@
 end
 %>
 <%=
-   if @highlight_length == 0
- h(@content).gsub("\n", "<br />").html_safe
-else
-   start = h(@content[0...@highlight_start])
-   middle = h(@content[@highlight_start...(@highlight_start+@highlight_length)])
-   last = h(@content[(@highlight_start+@highlight_length)..-1])
+
+   tagger = Tagger.new(h(@content))
+   if @highlight_length != 0
+     tagger.add("<span class='highlight'>", @highlight_start, true)
+     tagger.add("</span>", @highlight_start + @highlight_length, true)
+   end
+
+   if @last_mark_position != 0
+     tagger.add("<span class='mark'>", @current_position, true)
+     tagger.add("</span>", @last_mark_position, true)
+   end
+
+   tagger.add("<span class='cursor'>", @current_position, true)
+   tagger.add("</span>", @current_position + 1, true)
    
-   display_content = start + "<span class='highlight'>".html_safe + middle + "</span>".html_safe + last
-   display_content = display_content.gsub("\n", "<br />").html_safe
-   display_content
-end
+
+   tagger.display_content.gsub("\n", "<br />").html_safe
+   
  %>

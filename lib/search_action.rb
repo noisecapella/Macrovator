@@ -17,11 +17,10 @@ class SearchAction < Action
     if index.nil?
       user_state.temp_highlight_start = 0
       user_state.temp_highlight_length = 0
-      :failure
+      raise "Search failed, could not find '" + key + "'"
     else
       user_state.temp_highlight_start = index
       user_state.temp_highlight_length = key.length
-      :success
     end
   end
 end

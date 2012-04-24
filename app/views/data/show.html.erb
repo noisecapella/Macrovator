@@ -6,8 +6,9 @@
 <div id="info">
   <%= render "shared/display_info" %>
 </div>
+
 <div id="content">
-  <%= render "shared/display_content" %>
+  <%= text_area_tag :textarea_content, (render "shared/display_content"), :class => "tinymce", :rows => 40, :cols => 100 %>
 </div>
 
 <div id="sidebar">

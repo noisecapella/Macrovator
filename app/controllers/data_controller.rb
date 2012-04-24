@@ -1,15 +1,4 @@
 class DataController < ApplicationController
-  # GET /data
-  # GET /data.json
-  def index
-    @data = Datum.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @data }
-    end
-  end
-
   # GET /data/1
   # GET /data/1.json
   def show
@@ -21,10 +10,14 @@ class DataController < ApplicationController
       @content = user_state.temp_current_data
       @highlight_start = user_state.temp_highlight_start
       @highlight_length = user_state.temp_highlight_length
+      @current_position = user_state.current_position
+      @last_mark_position = user_state.last_mark_position
     else
       @content = @datum.content
       @highlight_start = 0
       @highlight_length = 0
+      @current_position = 0
+      @last_mark_position = 0
     end
 
     respond_to do |format|
