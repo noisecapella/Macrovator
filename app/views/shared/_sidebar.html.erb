@@ -22,6 +22,10 @@ action_types.count.times do |i|
 <%= link_to "Execute one at a time", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
 </p>
 <p>
+  <a href="#" id="record_keystrokes">Record keystrokes</a>
+  <a href="#" id="stop_recording">Stop recording</a>
+</p>
+<p>
 <%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected" %>
 </p>
 <% end %>

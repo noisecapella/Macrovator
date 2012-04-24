@@ -23,7 +23,7 @@
 //}
 
 function update_content(data) {
-    var content = $('#textarea_content');
+    var content = $('#content');
     tinyMCE.activeEditor.setContent(data["content"]);
 
     var info = $('#info');
@@ -36,14 +36,15 @@ function update_content(data) {
 
 function cursorAnimation()
 {
-    $("#textarea_content_ifr").contents().find(".cursor").animate(
+    $(".cursor").animate(
 	{opacity: 1}).animate(
 	    {opacity: 0});
 	
 }
 
-
 $(document).ready(function() {
+    $("#stop_recording").hide();
+
     $("#action_type_action_type").live('ajax:success', function(evt, data, status, xhr) {
 	    var fields = $('#argument_fields');
 	
@@ -61,12 +62,35 @@ $(document).ready(function() {
 	update_content(data);
     });
 
-    setInterval("cursorAnimation()", 600);
-});
+    $(document).keydown(function(e)
+			 {
+			     if ($("#stop_recording").is(":visible"))
+			     {
+				 switch (e.which)
+				 {
+				 case 37: //left
+				     return false;
+				 case 38: //up
+				     return false;
+				 case 39: //right
+				     return false;
+				 case 40: //down
+				     return false;
+				 default:
+				     return false;
+				 }
+			     }
+			 });
 
-tinyMCE.init({
-    mode: "textareas",
-    theme: "advanced",
-    content_css: "/assets/application.css?body=1",
-    readonly: true
+    $("#record_keystrokes").bind('click', function() {
+	$("#record_keystrokes").hide();
+	$("#stop_recording").show();
+    });
+
+    $("#stop_recording").bind('click', function() {
+	$("#record_keystrokes").show();
+	$("#stop_recording").hide();
+    });
+
+    setInterval("cursorAnimation()", 600);
 });
