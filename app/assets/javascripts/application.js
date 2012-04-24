@@ -22,6 +22,8 @@
 //    $(link).parent().append(content.replace(regexp, new_id));
 //}
 
+var KEYBOARD_ARRAY = [];
+
 function update_content(data) {
     var content = $('#content');
     tinyMCE.activeEditor.setContent(data["content"]);
@@ -43,6 +45,8 @@ function cursorAnimation()
 }
 
 $(document).ready(function() {
+    setInterval("cursorAnimation()", 600);
+
     $("#stop_recording").hide();
 
     $("#action_type_action_type").live('ajax:success', function(evt, data, status, xhr) {
@@ -66,6 +70,7 @@ $(document).ready(function() {
 			 {
 			     if ($("#stop_recording").is(":visible"))
 			     {
+				 KEYBOARD_ARRAY.push(e.which);
 				 switch (e.which)
 				 {
 				 case 37: //left
@@ -85,6 +90,8 @@ $(document).ready(function() {
     $("#record_keystrokes").bind('click', function() {
 	$("#record_keystrokes").hide();
 	$("#stop_recording").show();
+
+	KEYBOARD_ARRAY = [];
     });
 
     $("#stop_recording").bind('click', function() {
@@ -92,5 +99,4 @@ $(document).ready(function() {
 	$("#stop_recording").hide();
     });
 
-    setInterval("cursorAnimation()", 600);
 });
