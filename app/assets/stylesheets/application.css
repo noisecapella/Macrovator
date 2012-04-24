@@ -65,7 +65,7 @@ li
 .cursor
 {
     padding-left: 0px;
-    border-left: 1px solid black;
+    /* border-left: 1px solid black; */
     font-weight: bold;
     display: inline-block!important;
 }

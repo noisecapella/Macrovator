@@ -15,8 +15,8 @@ end
      tagger.add("</span>", @last_mark_position, true)
    end
 
-   tagger.add("<span class='cursor'>", @current_position, true)
-   tagger.add("</span>", @current_position + 1, true)
+   tagger.add("<span class='cursor'>|</span>", @current_position, true)
+   
    
 
    tagger.display_content.gsub("\n", "<br />").html_safe
