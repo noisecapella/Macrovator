@@ -14,6 +14,12 @@ Site::Application.routes.draw do
     collection do
       post 'keystrokes'
     end
+    member do
+      post 'clear'
+    end
+    member do
+      get 'status'
+    end
   end
 
   resources :action_types do

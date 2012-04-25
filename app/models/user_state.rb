@@ -17,19 +17,19 @@ class UserState < ActiveRecord::Base
   def reset_count(new_action_list_id)
     self.current_action_list_id = new_action_list_id
     self.current_action_list_index = 0
-    self.temp_highlight_start = 0
-    self.temp_highlight_length = 0
     self.current_position = 0
     self.last_mark_position = 0
+    self.temp_highlight_start = 0
+    self.temp_highlight_length = 0
   end
 
-  def reset_text(new_action_list_id)
+  def reset_text
     self.temp_current_data = current_action_list.datum.content
   end
 
   def reset(new_action_list_id)
     reset_count(new_action_list_id)
-    reset_text(new_action_list_id)
+    reset_text
   end
 
   def invalid?

@@ -80,6 +80,14 @@ $(document).ready(function() {
 
 	update_content(data);
     });
+    $("#clear_link").live("ajax:success", function(evt, data, status, xhr) {
+
+	update_content(data);
+    });
+    $("#record_keystrokes_link").live("ajax:success", function(evt, data, status, xhr) {
+
+	update_content(data);
+    });
 
     $(document).keydown(function(e)
 			 {
@@ -104,12 +112,12 @@ $(document).ready(function() {
 
 function bind_record_keystrokes()
 {
-    $("#record_keystrokes").bind('click', function() {
-	var pre = "<a href='#' onclick='return false;'>";
-	var post = "</a>";
+    $("#record_keystrokes_div").bind('click', function() {
 	if (!IS_RECORDING)
 	{
-	    $("#record_keystrokes").html(pre + "Stop recording" + post);
+		
+
+	    $("#record_keystrokes").html('<%= (link_to "Stop recording", url_for(:controller => :action_lists, :action => :status, :id => @datum.action_list.id), :remote => true, :id => "record_keystrokes_link").to_json %>');
 	    IS_RECORDING = true;
 
 	    KEYBOARD_ARRAY = [];
@@ -117,7 +125,7 @@ function bind_record_keystrokes()
 	else
 	{
 	    IS_RECORDING = false;
-	    $("#record_keystrokes").html(pre + "Record keystrokes" + post);
+	    $("#record_keystrokes").html('<%= (link_to "Record keystrokes", url_for(:controller => :action_lists, :action => :status, :id => @datum.action_list.id), :remote => true, :id => "record_keystrokes_link").to_json %>');
 	}
     });
 

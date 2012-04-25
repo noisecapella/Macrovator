@@ -81,6 +81,22 @@ class ActionListsController < ApplicationController
     end
   end
 
+  def clear
+    @action_list = ActionList.find(params[:id])
+    @action_list.action_types.each do |x|
+      x.destroy
+    end
+
+    @user_state = current_user.user_state
+    @user_state.reset(@action_list.id)
+    
+    if not @user_state.save
+      raise @user_state.errors.full_messages.to_s
+    end
+
+    render_status
+  end
+
   def reset
     @action_list = ActionList.find(params[:id])
 
@@ -93,14 +109,7 @@ class ActionListsController < ApplicationController
       notice = user_state.errors.full_messages.join("\n")
     end
 
-    @user_state = UserState.new
-    @user_state.reset(@action_list.id)
-
-    respond_to do |format|
-      format.json {
-        render :partial => "shared/content"
-      }
-    end
+    render_status
   end
 
   def keystrokes
@@ -109,55 +118,51 @@ class ActionListsController < ApplicationController
 
     user_state = current_user.user_state
     
-    print "KEYS: " + params.to_s
     params[:keys].values.each do |keys|
       key_number = keys.values.first.to_i
       key_type = keys.keys.first.to_sym
 
+      action_type = nil
       if key_type == :keydown
         action_type = DirectionKeyAction::create(key_number, action_list)
-      else
+      else if key_number != 0
         action_type = KeyPressAction::create(key_number, action_list)
       end
 
       if not action_type.nil?
-        action_type.arguments.each do |arg|
+        action_type.arguments.each { |arg|
           if not arg.save
             raise "Cannot save arg: " + arg.errors.full_messages.to_s
           end
-        end
+          }
         if not action_type.save
           raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
         end
       end
+      end
     end
     
-    @content = user_state.temp_current_data
-    @highlight_start = user_state.temp_highlight_start
-    @highlight_length = user_state.temp_highlight_length
-    @current_position = user_state.current_position
-    @last_mark_position = user_state.last_mark_position
+    render_status
+  end
 
+  def status
+    @action_list = ActionList.find(params[:id])
 
-    respond_to do |format|
-      format.json {
-        render :partial => "shared/content", :notice => notice
-      }
-    end
+    render_status
   end
 
   def execute
-    action_list_id = params[:id]
+    @action_list = ActionList.find(params[:id])
 
     user_state = current_user.user_state
 
+    if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
+      user_state.current_action_list_index = 0
+    end
+    
     if user_state.invalid?
-      user_state.reset_count(action_list_id)
+      user_state.reset_count(@action_list.id)
     else
-      if not user_state.in_progress?
-        user_state.reset_count(action_list_id)
-      end
-
       current_action_list = user_state.current_action_list
       
       current_action_type = current_action_list.action_types[user_state.current_action_list_index]
@@ -172,10 +177,19 @@ class ActionListsController < ApplicationController
       end
     end
     
-    @user_state = user_state
-
     if not user_state.save
       raise user_state.errors.full_messages.join("\n")
+    end
+
+    render_status
+  end
+
+  def render_status
+    if current_user.nil? or current_user.user_state.current_action_list.id != @action_list.id
+      @user_state = UserState.new
+      @user_state.reset(@action_list.id)
+    else
+      @user_state = current_user.user_state
     end
 
     respond_to do |format|
@@ -183,5 +197,6 @@ class ActionListsController < ApplicationController
         render :partial => "shared/content"
       }
     end
+
   end
 end
