@@ -113,8 +113,7 @@ class ActionListsController < ApplicationController
   end
 
   def keystrokes
-    action_list_id = current_user.user_state.current_action_list_id
-    action_list = ActionList.find_by_id(action_list_id)
+    @action_list = ActionList.find_by_id(current_user.user_state.current_action_list_id)
 
     user_state = current_user.user_state
     
@@ -124,9 +123,9 @@ class ActionListsController < ApplicationController
 
       action_type = nil
       if key_type == :keydown
-        action_type = DirectionKeyAction::create(key_number, action_list)
+        action_type = DirectionKeyAction::create(key_number, @action_list)
       else if key_number != 0
-        action_type = KeyPressAction::create(key_number, action_list)
+        action_type = KeyPressAction::create(key_number, @action_list)
       end
 
       if not action_type.nil?

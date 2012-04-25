@@ -26,22 +26,30 @@ sendKeystrokes = () ->
     if KEYBOARD_ARRAY.length > 0
         
         # TODO: if this fails, do a check to resend it later
-        $.post("/action_lists/keystrokes", {keys : KEYBOARD_ARRAY});
+        $.post("/action_lists/keystrokes", {keys : KEYBOARD_ARRAY}, (data) ->
+               update_content(data));
         KEYBOARD_ARRAY.splice(0, KEYBOARD_ARRAY.length);
 
     setTimeout(sendKeystrokes, 200);
 
 bind_record_keystrokes = () ->
+    message_is_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording</a>'
+    message_stopped_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>'
+    
+    if IS_RECORDING
+        $("#record_keystrokes_div").html(message_is_recording)
+    else
+        $("#record_keystrokes_div").html(message_stopped_recording)
+        
     $("#record_keystrokes_link").bind('click', () ->
-        alert("true")
         if !IS_RECORDING
-            $("#record_keystrokes_div").html('<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording</a>');
+            $("#record_keystrokes_div").html(message_is_recording);
             IS_RECORDING = true;
 
             KEYBOARD_ARRAY = [];
         else
             IS_RECORDING = false;
-            $("#record_keystrokes_div").html('<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>');
+            $("#record_keystrokes_div").html(message_stopped_recording);
         bind_record_keystrokes()
     );
 
@@ -59,7 +67,7 @@ $ ->
 
     do_update_content = (evt, data, status, xhr) ->
         update_content(data);
-    
+        
 
     $("#execute_link").live("ajax:success", do_update_content)
 
