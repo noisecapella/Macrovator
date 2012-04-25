@@ -1,8 +1,8 @@
 <%= 
-@datum = current_user.user_state.current_action_list.datum
+@datum = @user_state.current_action_list.datum
 
-{"content" => (render :partial => "shared/display_content", :formats => ["html"]),
-            "info" => (render :partial => "shared/display_info", :formats => ["html"]),
-	    "sidebar" => (render :partial => "shared/sidebar", :formats => ["html"])
+{"content" => (render :partial => "shared/display_content.html.erb", :formats => ["html"], :handlers => ["erb"]),
+            "info" => (render :partial => "shared/display_info.html.erb", :formats => ["html"], :handlers => ["erb"]),
+	    "sidebar" => (render :partial => "shared/sidebar.html.erb", :formats => ["html"], :handlers => ["erb"])
 }.to_json.html_safe
 %>

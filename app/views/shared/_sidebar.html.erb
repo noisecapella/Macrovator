@@ -5,11 +5,12 @@ user_state = current_user.user_state
 action_types = @datum.action_list.action_types
 action_types.count.times do |i|
    action_type = action_types[i] 
-   selected = (user_state.current_action_list_id == @datum.action_list.id and user_state.current_action_list_index == i + 1)
+   selected = (user_state.current_action_list_id == @datum.action_list.id and user_state.current_action_list_index == i)
  %>
 <%= ("<span class='selected'>" if selected).to_s.html_safe %>
-   <%= link_to action_type.description, action_type %><br />
+   <%= link_to action_type.description, action_type %>
 <%= ("</span>" if selected).to_s.html_safe %>
+<br />
 <% end %>
 
 <p>
@@ -17,15 +18,17 @@ action_types.count.times do |i|
 
 </p>
 
-<% if @datum.action_list.action_types.length > 0 %>
 <p>
 <%= link_to "Execute one at a time", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
 </p>
-<p>
-  <a href="#" id="record_keystrokes">Record keystrokes</a>
-  <a href="#" id="stop_recording">Stop recording</a>
-</p>
+<div id="record_keystrokes"><a href="#" onclick="return false;">Record keystrokes</a></div>
 <p>
 <%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected" %>
 </p>
-<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    bind_record_keystrokes();
+});
+</script>

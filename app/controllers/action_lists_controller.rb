@@ -93,9 +93,51 @@ class ActionListsController < ApplicationController
       notice = user_state.errors.full_messages.join("\n")
     end
 
-    @content = @action_list.datum.content
-    @highlight_start = 0
-    @highlight_length = 0
+    @user_state = UserState.new
+    @user_state.reset(@action_list.id)
+
+    respond_to do |format|
+      format.json {
+        render :partial => "shared/content"
+      }
+    end
+  end
+
+  def keystrokes
+    action_list_id = current_user.user_state.current_action_list_id
+    action_list = ActionList.find_by_id(action_list_id)
+
+    user_state = current_user.user_state
+    
+    print "KEYS: " + params.to_s
+    params[:keys].values.each do |keys|
+      key_number = keys.values.first.to_i
+      key_type = keys.keys.first.to_sym
+
+      if key_type == :keydown
+        action_type = DirectionKeyAction::create(key_number, action_list)
+      else
+        action_type = KeyPressAction::create(key_number, action_list)
+      end
+
+      if not action_type.nil?
+        action_type.arguments.each do |arg|
+          if not arg.save
+            raise "Cannot save arg: " + arg.errors.full_messages.to_s
+          end
+        end
+        if not action_type.save
+          raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+        end
+      end
+    end
+    
+    @content = user_state.temp_current_data
+    @highlight_start = user_state.temp_highlight_start
+    @highlight_length = user_state.temp_highlight_length
+    @current_position = user_state.current_position
+    @last_mark_position = user_state.last_mark_position
+
 
     respond_to do |format|
       format.json {
@@ -129,22 +171,16 @@ class ActionListsController < ApplicationController
         user_state.current_action_list_index += 1
       end
     end
+    
+    @user_state = user_state
 
-    @content = user_state.temp_current_data
-    @highlight_start = user_state.temp_highlight_start
-    @highlight_length = user_state.temp_highlight_length
-    @current_position = user_state.current_position
-    @last_mark_position = user_state.last_mark_position
-
-    notice = nil
     if not user_state.save
-      notice = user_state.errors.full_messages.join("\n")
-      print "NOTICE: " + notice
+      raise user_state.errors.full_messages.join("\n")
     end
 
     respond_to do |format|
       format.json {
-        render :partial => "shared/content", :notice => notice
+        render :partial => "shared/content"
       }
     end
   end

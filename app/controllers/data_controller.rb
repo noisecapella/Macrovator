@@ -7,17 +7,10 @@ class DataController < ApplicationController
     user_state = current_user.user_state
 
     if not current_user.nil? and @datum.action_list.id == user_state.current_action_list_id and not user_state.temp_current_data.nil?
-      @content = user_state.temp_current_data
-      @highlight_start = user_state.temp_highlight_start
-      @highlight_length = user_state.temp_highlight_length
-      @current_position = user_state.current_position
-      @last_mark_position = user_state.last_mark_position
+      @user_state = user_state
     else
-      @content = @datum.content
-      @highlight_start = 0
-      @highlight_length = 0
-      @current_position = 0
-      @last_mark_position = 0
+      @user_state = UserState.new
+      @user_state.reset(@datum.action_list.id)
     end
 
     respond_to do |format|

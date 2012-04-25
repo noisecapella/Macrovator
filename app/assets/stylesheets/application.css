@@ -65,12 +65,14 @@ li
 .cursor
 {
     padding-left: 0px;
-    /* border-left: 1px solid black; */
-    font-weight: bold;
+    border-left: 1px solid black;
     display: inline-block!important;
 }
 
 .selected
 {
-    font-weight: bold;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 0px;
+    border-bottom: 0px;
 }

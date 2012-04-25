@@ -11,6 +11,9 @@ Site::Application.routes.draw do
     member do
       get 'execute'
     end
+    collection do
+      post 'keystrokes'
+    end
   end
 
   resources :action_types do

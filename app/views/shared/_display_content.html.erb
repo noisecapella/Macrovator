@@ -1,22 +1,18 @@
-<% if @content.nil? or @content.empty?
-   @content = "ERROR: no content"
-end
-%>
 <%=
 
-   tagger = Tagger.new(h(@content))
-   if @highlight_length != 0
-     tagger.add("<span class='highlight'>", @highlight_start, true)
-     tagger.add("</span>", @highlight_start + @highlight_length, true)
+   tagger = Tagger.new(h(@user_state.temp_current_data))
+   if @user_state.temp_highlight_length != 0
+     tagger.add("<span class='highlight'>", @user_state.temp_highlight_start, true)
+     tagger.add("</span>", @user_state.temp_highlight_start + @user_state.temp_highlight_length, true)
    end
 
-   if @last_mark_position != 0
-     tagger.add("<span class='mark'>", @current_position, true)
-     tagger.add("</span>", @last_mark_position, true)
+   if @user_state.last_mark_position != 0
+     tagger.add("<span class='mark'>", @user_state.current_position, true)
+     tagger.add("</span>", @user_state.last_mark_position, true)
    end
 
-   tagger.add("<span class='cursor'>|</span>", @current_position, true)
-   
+   tagger.add("<span class='cursor'>", @user_state.current_position, true)
+   tagger.add("</span>", @user_state.current_position + 1, true)
    
 
    tagger.display_content.gsub("\n", "<br />").html_safe

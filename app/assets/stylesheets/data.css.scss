@@ -25,6 +25,8 @@ $total_width: 800px;
 
 	width: 0.6 * $total_width;
 	float: left;
+
+	font-family: Andale Mono, monospace;
 }
 
 #sidebar
@@ -37,4 +39,9 @@ $total_width: 800px;
 
 	float: right;
 	width: 0.2 * $total_width;
+}
+
+#record_keystrokes
+{
+	text-decoration: underline;
 }

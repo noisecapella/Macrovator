@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require tinymce-jquery
+//= require jquery-ui
 
 //  sdf= require_tree .
 
@@ -23,10 +23,11 @@
 //}
 
 var KEYBOARD_ARRAY = [];
+var IS_RECORDING = false;
 
 function update_content(data) {
     var content = $('#content');
-    tinyMCE.activeEditor.setContent(data["content"]);
+    content.html(data["content"]);
 
     var info = $('#info');
     info.html(data["info"]);
@@ -38,10 +39,24 @@ function update_content(data) {
 
 function cursorAnimation()
 {
-    $(".cursor").animate(
+   /* $(".cursor").animate(
 	{opacity: 1}).animate(
-	    {opacity: 0});
+	    {opacity: 0});*/
+
+    $(".cursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"});
 	
+}
+
+function sendKeystrokes()
+{
+    if (KEYBOARD_ARRAY.length > 0)
+    {
+	// TODO: if this fails, do a check to resend it later
+	$.post("/action_lists/keystrokes", {keys : KEYBOARD_ARRAY});
+	KEYBOARD_ARRAY.splice(0, KEYBOARD_ARRAY.length);
+    }
+
+    setTimeout("sendKeystrokes()", 200);
 }
 
 $(document).ready(function() {
@@ -68,35 +83,42 @@ $(document).ready(function() {
 
     $(document).keydown(function(e)
 			 {
-			     if ($("#stop_recording").is(":visible"))
+			     if (IS_RECORDING)
 			     {
-				 KEYBOARD_ARRAY.push(e.which);
-				 switch (e.which)
-				 {
-				 case 37: //left
-				     return false;
-				 case 38: //up
-				     return false;
-				 case 39: //right
-				     return false;
-				 case 40: //down
-				     return false;
-				 default:
-				     return false;
-				 }
+				 KEYBOARD_ARRAY.push({"keydown": e.which});
+				 return false;
+			     }
+			 });
+    $(document).keypress(function(e)
+			 {
+			     if (IS_RECORDING)
+			     {
+				 KEYBOARD_ARRAY.push({"keypress": e.which});
+				 return false;
 			     }
 			 });
 
-    $("#record_keystrokes").bind('click', function() {
-	$("#record_keystrokes").hide();
-	$("#stop_recording").show();
-
-	KEYBOARD_ARRAY = [];
-    });
-
-    $("#stop_recording").bind('click', function() {
-	$("#record_keystrokes").show();
-	$("#stop_recording").hide();
-    });
+    setTimeout("sendKeystrokes()", 200);
 
 });
+
+function bind_record_keystrokes()
+{
+    $("#record_keystrokes").bind('click', function() {
+	var pre = "<a href='#' onclick='return false;'>";
+	var post = "</a>";
+	if (!IS_RECORDING)
+	{
+	    $("#record_keystrokes").html(pre + "Stop recording" + post);
+	    IS_RECORDING = true;
+
+	    KEYBOARD_ARRAY = [];
+	}
+	else
+	{
+	    IS_RECORDING = false;
+	    $("#record_keystrokes").html(pre + "Record keystrokes" + post);
+	}
+    });
+
+}
