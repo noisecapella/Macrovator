@@ -13,7 +13,9 @@ class KeyPressAction < Action
     key = args.first.value.chr
     data = user_state.temp_current_data
 
-    data.insert(user_state.current_position, key)
+    # TODO: figure out how to force updating even if we use the same string
+    # data = data.insert(user_state.current_position, key)
+    user_state.temp_current_data = data[0...user_state.current_position] + key + data[user_state.current_position..-1]
     user_state.current_position += 1
   end
 
