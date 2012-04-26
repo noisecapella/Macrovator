@@ -33,6 +33,7 @@ class DataController < ApplicationController
   # GET /data/1/edit
   def edit
     @datum = Datum.find(params[:id])
+    switch_action_list(@datum.action_list.id)
   end
 
   # POST /data

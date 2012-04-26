@@ -13,7 +13,9 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new
   # GET /action_types/new.json
   def new
+    switch_action_list(params[:action_list_id])
     @action_list = current_user.user_state.current_action_list
+    
     @action_type = ActionType.new(:action_list => @action_list,
                                   :action_type => SearchAction::Id)
     @action_type.arguments = populate_arguments(@action_type.action_type)
@@ -31,9 +33,9 @@ class ActionTypesController < ApplicationController
 
   # GET /action_types/1/edit
   def edit
-    
     @action_type = ActionType.find(params[:id])
     @action_list = @action_type.action_list
+    switch_action_list(@action_list.id)
   end
 
   # POST /action_types
@@ -87,6 +89,7 @@ class ActionTypesController < ApplicationController
   def select_changed
     action_type_type = params[:action_type][:action_type]
     action_type_id = params[:action_type][:action_type_id]
+    switch_action_list(action_type_id)
 
     # note that this isn't saved here
     @action_list = ActionList.find_by_id(params[:id])

@@ -74,6 +74,8 @@ class ActionListsController < ApplicationController
   def execute
     @action_list = ActionList.find(params[:id])
 
+    switch_action_list(@action_list.id)
+
     user_state = current_user.user_state
 
     if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
