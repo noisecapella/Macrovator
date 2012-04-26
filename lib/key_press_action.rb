@@ -16,10 +16,10 @@ class KeyPressAction < Action
     # TODO: figure out how to force updating even if we use the same string
     # data = data.insert(user_state.current_position, key)
     user_state.temp_current_data = data[0...user_state.current_position] + key + data[user_state.current_position..-1]
-    user_state.current_position += 1
-    if user_state.temp_highlight_length != 0
+    if user_state.temp_highlight_length != 0 and user_state.temp_highlight_start >= user_state.current_position
       user_state.temp_highlight_start += 1
     end
+    user_state.current_position += 1
   end
 
   def self.create(key_number, action_list)
