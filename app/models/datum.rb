@@ -7,4 +7,5 @@ class Datum < ActiveRecord::Base
   validates :title, :presence => true
   validates :content, :presence => true
   validates :action_list, :presence => true
+
 end

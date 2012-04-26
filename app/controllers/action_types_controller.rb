@@ -24,15 +24,20 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new
   # GET /action_types/new.json
   def new
-    @action_list = ActionList.find(params[:action_list_id])
+    @action_list = current_user.user_state.current_action_list
     @action_type = ActionType.new(:action_list => @action_list,
                                   :action_type => SearchAction::Id)
     @action_type.arguments = populate_arguments(@action_type.action_type)
 
+    render_new
+  end
+
+  def render_new
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :new }
       format.json { render json: @action_type }
     end
+
   end
 
   # GET /action_types/1/edit
@@ -45,14 +50,16 @@ class ActionTypesController < ApplicationController
   # POST /action_types
   # POST /action_types.json
   def create
+    @action_list = current_user.user_state.current_action_list
     @action_type = ActionType.new(params[:action_type])
+    verify_user(@action_type.action_list.datum.user.id)
 
     respond_to do |format|
       if @action_type.save
         format.html { redirect_to @action_type, notice: 'Action type was successfully created.' }
         format.json { render json: @action_type, status: :created, location: @action_type }
       else
-        format.html { render action: "new" }
+        format.html { render_new }
         format.json { render json: @action_type.errors, status: :unprocessable_entity }
       end
     end
@@ -62,6 +69,7 @@ class ActionTypesController < ApplicationController
   # PUT /action_types/1.json
   def update
     @action_type = ActionType.find(params[:id])
+    verify_user(@action_type.action_list.datum.user.id)
 
     respond_to do |format|
       if @action_type.update_attributes(params[:action_type])
@@ -78,6 +86,7 @@ class ActionTypesController < ApplicationController
   # DELETE /action_types/1.json
   def destroy
     @action_type = ActionType.find(params[:id])
+    verify_user(@action_type.action_list.datum.user.id)
     @action_type.destroy
 
     respond_to do |format|

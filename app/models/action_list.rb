@@ -6,4 +6,5 @@ class ActionList < ActiveRecord::Base
 
   validates :datum, :presence => true
   validates :name, :presence => true
+
 end

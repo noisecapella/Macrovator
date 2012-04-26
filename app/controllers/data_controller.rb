@@ -60,6 +60,7 @@ class DataController < ApplicationController
   # PUT /data/1.json
   def update
     @datum = Datum.find(params[:id])
+    verify_user(@datum.user.id)
 
     respond_to do |format|
       if @datum.update_attributes(params[:datum])
@@ -76,6 +77,7 @@ class DataController < ApplicationController
   # DELETE /data/1.json
   def destroy
     @datum = Datum.find(params[:id])
+    verify_user(@datum.user.id)
     @datum.destroy
 
     respond_to do |format|

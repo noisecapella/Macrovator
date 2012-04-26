@@ -9,7 +9,7 @@ class UserState < ActiveRecord::Base
   attr_accessible :user
 
   validates :user, :presence => true
-
+gi
   def current_action_list
     ActionList.find_by_id(current_action_list_id)
   end
