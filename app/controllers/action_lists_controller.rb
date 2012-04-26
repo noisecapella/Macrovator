@@ -44,7 +44,7 @@ class ActionListsController < ApplicationController
       key_type = keys.keys.first.to_sym
 
       if key_type == :keydown
-        action_type = DirectionKeyAction::create(key_number, @action_list)
+        action_type = SpecialKeyAction::create(key_number, @action_list)
       else
         action_type = KeyPressAction::create(key_number, @action_list)
       end

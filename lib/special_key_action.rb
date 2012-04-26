@@ -1,4 +1,4 @@
-class DirectionKeyAction < Action
+class SpecialKeyAction < Action
   Arguments = [
                {:key => "direction", :default => :down, :optional => false}
               ]
