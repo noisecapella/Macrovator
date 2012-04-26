@@ -6,16 +6,14 @@
 </p>
 
 <p>
-  <b>Action list:</b>
-  <%= link_to @action_type.action_list.name, @action_type.action_list %>
+  <b>Data:</b>
+  <%= link_to @action_type.action_list.datum.title, @action_type.action_list.datum %>
 </p>
 
 <p>
-  <b>Arguments:</b>
+  <b>Arguments</b>
+<ul>
 <% for argument in @action_type.arguments %>
-  <p><b><%= argument.key.capitalize %></b>: <%= argument.value %><p>
+  <li><b><%= argument.key.capitalize %></b>: <%= argument.value %></li>
 <% end %>
-
-<p>
-<%= link_to 'Edit', edit_action_type_path(@action_type) %>
-</p>
+</ul>

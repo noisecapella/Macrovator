@@ -14,7 +14,7 @@ action_types.count.times do |i|
 <% end %>
 
 <p>
-<%= link_to 'New action', new_action_type_path(:action_list_id =>  @datum.action_list.id) %>
+<%= link_to 'New action', new_action_type_path(:action_list_id => @datum.action_list.id, :position => @datum.action_list.action_types.count) %>
 
 </p>
 

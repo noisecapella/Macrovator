@@ -14,7 +14,7 @@ class ActionListsController < ApplicationController
       raise @user_state.errors.full_messages.to_s
     end
 
-    render_status
+    render_status(0)
   end
 
   def reset
@@ -29,7 +29,7 @@ class ActionListsController < ApplicationController
       notice = user_state.errors.full_messages.join("\n")
     end
 
-    render_status
+    render_status(0)
   end
 
   def keystrokes
@@ -38,75 +38,95 @@ class ActionListsController < ApplicationController
 
     user_state = current_user.user_state
     
-    params[:keys].values.each do |keys|
+    key_values = params[:keys].values
+    key_values.each do |keys|
       key_number = keys.values.first.to_i
       key_type = keys.keys.first.to_sym
 
-      action_type = nil
       if key_type == :keydown
         action_type = DirectionKeyAction::create(key_number, @action_list)
-      else if key_number != 0
+      else
         action_type = KeyPressAction::create(key_number, @action_list)
       end
 
-      if not action_type.nil?
-        action_type.arguments.each { |arg|
-          if not arg.save
-            raise "Cannot save arg: " + arg.errors.full_messages.to_s
-          end
-          }
-        if not action_type.save
-          raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+      action_type.arguments.each do |arg|
+        if not arg.save
+          raise "Cannot save arg: " + arg.errors.full_messages.to_s
         end
       end
+      
+      position = user_state.current_action_list_index
+      @action_list.action_types.each do |a|
+        # TODO: what if some positions don't get saved successfully? corruption?
+        if a.position >= position
+          a.position = a.position + 1
+          if not a.save
+            raise "Cannot save action_type while updating position: " + a.errors.full_messages.to_s
+          end
+        end
       end
+
+      action_type.position = position
+      if not action_type.save
+        raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+      end
+      
+      user_state.current_action_list_index += 1
     end
-    
-    render_status
+
+    user_state.current_action_list_index -= key_values.length
+    render_status(key_values.length)
   end
 
   def status
     @action_list = ActionList.find(params[:id])
 
-    render_status
+    render_status(0)
   end
 
   def execute
     @action_list = ActionList.find(params[:id])
 
-    switch_action_list(@action_list.id)
-
-    user_state = current_user.user_state
-
-    if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
-      user_state.current_action_list_index = 0
-    end
-    
-    if user_state.invalid?
-      user_state.reset_count(@action_list.id)
-    else
-      current_action_list = user_state.current_action_list
-      
-      current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-
-      begin
-        current_action_type.process(user_state, current_action_type.arguments)
-      rescue RuntimeError => e
-        @errors = "Error: " + e.to_s
-        user_state.current_action_list_index = 0
-      else
-        user_state.current_action_list_index += 1
-      end
-    end
-    
-    if not user_state.save
-      raise user_state.errors.full_messages.join("\n")
-    end
-
-    render_status
+    render_status(1)
   end
 
-  def render_status
+  def render_status(execute_count)
+    # if execute_count > 0, execute that many action_types. then render
+    # content, info and the sidebar, passing it back as json
+    if execute_count > 0
+      switch_action_list(@action_list.id)
+
+      user_state = current_user.user_state
+    end
+    
+    execute_count.times do |i|
+      if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
+        user_state.current_action_list_index = 0
+      end
+      
+      if user_state.invalid?
+        user_state.reset_count(@action_list.id)
+      else
+        current_action_list = user_state.current_action_list
+        
+        current_action_type = current_action_list.action_types[user_state.current_action_list_index]
+
+        begin
+          current_action_type.process(user_state, current_action_type.arguments)
+        rescue RuntimeError => e
+          @errors = "Error: " + e.to_s
+          user_state.current_action_list_index = 0
+        else
+          user_state.current_action_list_index += 1
+        end
+      end
+      
+      if not user_state.save
+        raise user_state.errors.full_messages.join("\n")
+      end
+
+    end
+    
     if current_user.nil? or current_user.user_state.current_action_list.id != @action_list.id
       @user_state = UserState.new
       @user_state.reset(@action_list.id)

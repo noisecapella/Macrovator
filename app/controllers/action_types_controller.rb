@@ -14,6 +14,7 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new.json
   def new
     switch_action_list(params[:action_list_id])
+    @position = params[:position].to_i
     @action_list = current_user.user_state.current_action_list
     
     @action_type = ActionType.new(:action_list => @action_list,

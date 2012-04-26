@@ -24,7 +24,6 @@ cursorAnimation = () ->
 
 sendKeystrokes = () ->
     if KEYBOARD_ARRAY.length > 0
-        
         # TODO: if this fails, do a check to resend it later
         $.post("/action_lists/keystrokes", {keys : KEYBOARD_ARRAY}, (data) ->
                update_content(data));
@@ -75,14 +74,13 @@ $ ->
     $("#clear_link").live("ajax:success", do_update_content)
     $("#record_keystrokes_link").live("ajax:success", do_update_content)
 
-    $(document).keydown((e) ->
-                             if IS_RECORDING
-                                 KEYBOARD_ARRAY.push({"keydown": e.which});
-                                 false
-                             );
     $(document).keypress((e) ->
+                             # alert("keypress" + e.which)
                              if IS_RECORDING
-                                 KEYBOARD_ARRAY.push({"keypress": e.which});
+                                 if e.which == 0
+                                     KEYBOARD_ARRAY.push({"keydown" : e.keyCode})
+                                 else
+                                     KEYBOARD_ARRAY.push({"keypress": e.which})
                                  false
                          );
 

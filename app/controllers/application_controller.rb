@@ -16,8 +16,12 @@ class ApplicationController < ActionController::Base
   private
   def switch_action_list(action_list_id)
     # TODO: if current_user is nil, make them log in first
-    if current_user.current_action_list.nil? or current_user.current_action_list.id != action_list_id
-      current_user.user_state.reset(params[:action_list_id])
+    user_state = current_user.user_state
+    if user_state.current_action_list.nil? or user_state.current_action_list.id != action_list_id
+      user_state.reset(action_list_id)
+      if not user_state.save
+        raise "Problem updating user temporary information"
+      end
     end
   end
 

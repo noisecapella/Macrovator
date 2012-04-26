@@ -17,6 +17,9 @@ class KeyPressAction < Action
     # data = data.insert(user_state.current_position, key)
     user_state.temp_current_data = data[0...user_state.current_position] + key + data[user_state.current_position..-1]
     user_state.current_position += 1
+    if user_state.temp_highlight_length != 0
+      user_state.temp_highlight_start += 1
+    end
   end
 
   def self.create(key_number, action_list)
