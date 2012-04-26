@@ -76,12 +76,10 @@ $ ->
     $("#record_keystrokes_link").live("ajax:success", do_update_content)
 
     $(document).keypress((e) ->
-                             alert("keypress" + e.which)
-                             if IS_RECORDING
-                                 KEYBOARD_ARRAY.push({"keypress": e.which or e.keyCode})
+                             if IS_RECORDING and e.which != 0
+                                 KEYBOARD_ARRAY.push({"keypress": e.which})
                                  false)
     $(document).keydown((e) ->
-                            # alert("keydown" + e.which
                             if IS_RECORDING
                                 KEYBOARD_ARRAY.push({"keydown": e.which or e.keyCode})
                                 false)
