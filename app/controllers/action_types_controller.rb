@@ -1,15 +1,4 @@
 class ActionTypesController < ApplicationController
-  # GET /action_types
-  # GET /action_types.json
-  def index
-    @action_types = ActionType.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @action_types }
-    end
-  end
-
   # GET /action_types/1
   # GET /action_types/1.json
   def show
