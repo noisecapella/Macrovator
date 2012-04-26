@@ -49,29 +49,32 @@ class ActionListsController < ApplicationController
         action_type = KeyPressAction::create(key_number, @action_list)
       end
 
-      action_type.arguments.each do |arg|
-        if not arg.save
-          raise "Cannot save arg: " + arg.errors.full_messages.to_s
-        end
-      end
-      
-      position = user_state.current_action_list_index
-      @action_list.action_types.each do |a|
-        # TODO: what if some positions don't get saved successfully? corruption?
-        if a.position >= position
-          a.position = a.position + 1
-          if not a.save
-            raise "Cannot save action_type while updating position: " + a.errors.full_messages.to_s
+      if not action_type.nil?
+
+        action_type.arguments.each do |arg|
+          if not arg.save
+            raise "Cannot save arg: " + arg.errors.full_messages.to_s
           end
         end
-      end
+        
+        position = user_state.current_action_list_index
+        @action_list.action_types.each do |a|
+          # TODO: what if some positions don't get saved successfully? corruption?
+          if a.position >= position
+            a.position = a.position + 1
+            if not a.save
+              raise "Cannot save action_type while updating position: " + a.errors.full_messages.to_s
+            end
+          end
+        end
 
-      action_type.position = position
-      if not action_type.save
-        raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+        action_type.position = position
+        if not action_type.save
+          raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+        end
+        
+        user_state.current_action_list_index += 1
       end
-      
-      user_state.current_action_list_index += 1
     end
 
     user_state.current_action_list_index -= key_values.length
