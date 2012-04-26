@@ -24,6 +24,9 @@ action_types.count.times do |i|
 <div id="record_keystrokes_div">
   <a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>
 </div>
+<%= 
+# a hidden form so that javascript knows the correct keystrokes id
+form_tag(url_for(:controller => :action_lists, :action =>:keystrokes, :id => @datum.action_list.id), :id => "record_keystrokes_hidden_form")  do end %>
 <p>
 <%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected" %>
 </p>

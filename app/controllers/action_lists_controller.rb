@@ -33,19 +33,28 @@ class ActionListsController < ApplicationController
   end
 
   def keystrokes
-    @action_list = ActionList.find_by_id(current_user.user_state.current_action_list_id)
+    @action_list = ActionList.find(params[:id])
+    user_state = current_user.user_state
+
+    switch_action_list(@action_list.id)
     verify_user(@action_list.datum.user.id)
 
-    user_state = current_user.user_state
-    
+    success_key_count = 0
+
     key_values = params[:keys].values
     key_values.each do |keys|
-      key_number = keys.values.first.to_i
-      key_type = keys.keys.first.to_sym
+      key_number = (keys["keydown"] or keys["keypress"]).to_i
+      if keys.include?("keydown")
+        key_type = :keydown
+      elsif keys.include?("keypress")
+        key_type = :keypress
+      else
+        raise "Key must be keypress or keydown"
+      end
 
       if key_type == :keydown
         action_type = SpecialKeyAction::create(key_number, @action_list)
-      else
+      elsif key_type == :keypress
         action_type = KeyPressAction::create(key_number, @action_list)
       end
 
@@ -73,12 +82,11 @@ class ActionListsController < ApplicationController
           raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
         end
         
-        user_state.current_action_list_index += 1
+        success_key_count += 1
       end
     end
 
-    user_state.current_action_list_index -= key_values.length
-    render_status(key_values.length)
+    render_status(success_key_count)
   end
 
   def status

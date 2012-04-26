@@ -6,6 +6,9 @@ root = exports ? this
 
 KEYBOARD_ARRAY = [];
 IS_RECORDING = false;
+CTRL_KEY = false
+ALT_KEY = false
+SHIFT_KEY = false
 
 update_content = (data) ->
     content = $('#content');
@@ -26,7 +29,8 @@ cursorAnimation = () ->
 sendKeystrokes = () ->
     if KEYBOARD_ARRAY.length > 0
         # TODO: if this fails, do a check to resend it later
-        $.post("/action_lists/keystrokes", {keys : KEYBOARD_ARRAY}, (data) ->
+        url = $("#record_keystrokes_hidden_form").attr('action')
+        $.post(url, {keys : KEYBOARD_ARRAY}, (data) ->
                update_content(data));
         KEYBOARD_ARRAY.splice(0, KEYBOARD_ARRAY.length);
 
@@ -53,6 +57,12 @@ bind_record_keystrokes = () ->
         bind_record_keystrokes()
     );
 
+add_modifiers = (m, e) ->
+    m["ctrl"] = true if e.ctrlKey
+    m["alt"] = true if e.altKey
+    m["shift"] = true if e.shiftKey
+    m["meta"] = true if e.metaKey
+
 
 $ ->
     setInterval(cursorAnimation, 600);
@@ -77,10 +87,14 @@ $ ->
 
     $(document).keypress((e) ->
                              if IS_RECORDING and e.which != 0
-                                 KEYBOARD_ARRAY.push({"keypress": e.which})
+                                 m = {"keypress": e.which}
+                                 add_modifiers(m, e)
+                                 KEYBOARD_ARRAY.push(m)
                                  false)
     $(document).keydown((e) ->
                             if IS_RECORDING
+                                m = {"keydown": e.which or e.keyCode}
+                                add_modifiers(m, e)
                                 KEYBOARD_ARRAY.push({"keydown": e.which or e.keyCode})
                                 false)
 

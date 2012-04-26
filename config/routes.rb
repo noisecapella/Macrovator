@@ -11,7 +11,7 @@ Site::Application.routes.draw do
     member do
       get 'execute'
     end
-    collection do
+    member do
       post 'keystrokes'
     end
     member do

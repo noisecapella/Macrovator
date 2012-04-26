@@ -23,6 +23,7 @@ class KeyPressAction < Action
   end
 
   def self.create(key_number, action_list)
+    print "CREATE  KEY"
     action_type = ActionType.new
     action_type.action_type = Id
     action_type.action_list = action_list
