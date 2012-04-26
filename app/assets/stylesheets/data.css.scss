@@ -45,3 +45,35 @@ $total_width: 800px;
 {
 	text-decoration: underline;
 }
+
+.highlight
+{
+    background-color: #ffff40;
+}
+
+.mark
+{
+    color: red;
+}
+
+.cursor
+{
+    padding-left: 0px;
+    border-left: 1px solid black;
+    display: inline-block!important;
+}
+
+.rcursor
+{
+    padding-right: 0px;
+    border-right: 1px solid black;
+    display: inline-block!important;
+}
+
+.selected
+{
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 0px;
+    border-bottom: 0px;
+}

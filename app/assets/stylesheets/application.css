@@ -52,27 +52,3 @@ li
     margin-left: 0px;
 }
 
-.highlight
-{
-    background-color: #ffff40;
-}
-
-.mark
-{
-    color: red;
-}
-
-.cursor
-{
-    padding-left: 0px;
-    border-left: 1px solid black;
-    display: inline-block!important;
-}
-
-.selected
-{
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 0px;
-    border-bottom: 0px;
-}

@@ -21,6 +21,7 @@ update_content = (data) ->
 
 cursorAnimation = () ->
     $(".cursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"});
+    $(".rcursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"});
 
 sendKeystrokes = () ->
     if KEYBOARD_ARRAY.length > 0
@@ -75,14 +76,15 @@ $ ->
     $("#record_keystrokes_link").live("ajax:success", do_update_content)
 
     $(document).keypress((e) ->
-                             # alert("keypress" + e.which)
+                             alert("keypress" + e.which)
                              if IS_RECORDING
-                                 if e.which == 0
-                                     KEYBOARD_ARRAY.push({"keydown" : e.keyCode})
-                                 else
-                                     KEYBOARD_ARRAY.push({"keypress": e.which})
-                                 false
-                         );
+                                 KEYBOARD_ARRAY.push({"keypress": e.which or e.keyCode})
+                                 false)
+    $(document).keydown((e) ->
+                            # alert("keydown" + e.which
+                            if IS_RECORDING
+                                KEYBOARD_ARRAY.push({"keydown": e.which or e.keyCode})
+                                false)
 
     setTimeout(sendKeystrokes, 200);
     bind_record_keystrokes()

@@ -11,8 +11,13 @@
      tagger.add("</span>", @user_state.last_mark_position, true)
    end
 
-   tagger.add("<span class='cursor'>", @user_state.current_position, true)
-   tagger.add("</span>", @user_state.current_position + 1, true)
+   if @user_state.temp_current_data[@user_state.current_position + 1] == "\n" and @user_state.temp_current_data[@user_state.current_position] != "\n" and @user_state.current_position > 0
+     tagger.add("<span class='rcursor'>", @user_state.current_position - 1, true)
+     tagger.add("</span>", @user_state.current_position, true)
+   else
+     tagger.add("<span class='cursor'>", @user_state.current_position, true)
+     tagger.add("</span>", @user_state.current_position + 1, true)
+   end
    
 
    tagger.display_content.gsub("\n", "<br />").html_safe

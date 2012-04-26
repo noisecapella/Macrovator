@@ -10,15 +10,17 @@ class DirectionKeyAction < Action
   end
   
   def self.do_process(user_state, args)
-    direction = args.first.value
+    direction = args.first.value.to_sym
     data = user_state.temp_current_data
     current_position = user_state.current_position
     
     if direction == :down or direction == :up
-      previous_newline_index = data.rindex("\n", current_position) or 0
+      previous_newline_index = (data.rindex("\n", current_position) or 0)
       position_in_line = current_position - previous_newline_index
 
-      next_newline_index = direction == :down ? data.index("\n", previous_newline_index + 1) : data.rindex("\n", previous_newline_index - 1)
+      rindex = previous_newline_index == 0 ? 0 : data.rindex("\n", previous_newline_index - 1)
+      next_newline_index = direction == :down ? data.index("\n", previous_newline_index + 1) : rindex
+
       if next_newline_index.nil?
         raise "Cannot go " + direction.to_s + " from here"
       else
@@ -27,6 +29,14 @@ class DirectionKeyAction < Action
     else
       inc = direction == :left ? -1 : 1
       user_state.current_position += inc
+    end
+
+    if user_state.current_position < 0
+      user_state.current_position = 0
+      raise "Went too far to left"
+    elsif user_state.current_position >= user_state.temp_current_data.length
+      user_state.current_position = user_state.temp_current_data.length - 1
+      raise "Went too far to right"
     end
   end
 
