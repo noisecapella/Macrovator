@@ -19,7 +19,9 @@
      tagger.add("</span>", @user_state.current_position + 1, true)
    end
    
+   tagger.add_global_replace("\n", "<br />", true)
+   # tagger.add_global_replace(" ", "&nbsp;", true)
 
-   tagger.display_content.gsub("\n", "<br />").html_safe
+   tagger.display_content.html_safe
    
  %>
