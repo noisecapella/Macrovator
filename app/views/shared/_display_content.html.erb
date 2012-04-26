@@ -2,25 +2,23 @@
 
    tagger = Tagger.new(h(@user_state.temp_current_data))
    if @user_state.temp_highlight_length != 0
-     tagger.add("<span class='highlight'>", @user_state.temp_highlight_start, true)
-     tagger.add("</span>", @user_state.temp_highlight_start + @user_state.temp_highlight_length, true)
+     tagger.add_tags("<span class='highlight'>", @user_state.temp_highlight_start, 
+                     "</span>", @user_state.temp_highlight_start + @user_state.temp_highlight_length)
    end
 
    if @user_state.last_mark_position != 0
-     tagger.add("<span class='mark'>", @user_state.current_position, true)
-     tagger.add("</span>", @user_state.last_mark_position, true)
+     tagger.add_tags("<span class='mark'>", @user_state.current_position, "</span>", @user_state.last_mark_position)
    end
 
    if @user_state.temp_current_data[@user_state.current_position + 1] == "\n" and @user_state.temp_current_data[@user_state.current_position] != "\n" and @user_state.current_position > 0
-     tagger.add("<span class='rcursor'>", @user_state.current_position - 1, true)
-     tagger.add("</span>", @user_state.current_position, true)
+     tagger.add_tags("<span class='rcursor'>", @user_state.current_position - 1, 
+                     "</span>", @user_state.current_position)
    else
-     tagger.add("<span class='cursor'>", @user_state.current_position, true)
-     tagger.add("</span>", @user_state.current_position + 1, true)
+     tagger.add_tags("<span class='cursor'>", @user_state.current_position, 
+                     "</span>", @user_state.current_position + 1)
    end
    
    tagger.add_global_replace("\n", "<br />", true)
-   # tagger.add_global_replace(" ", "&nbsp;", true)
 
    tagger.display_content.html_safe
    
