@@ -86,17 +86,28 @@ $ ->
     $("#record_keystrokes_link").live("ajax:success", do_update_content)
 
     $(document).keypress((e) ->
-                             if IS_RECORDING and e.which != 0
+                             # keep this list as short as possible, to avoid collisions
+                             if e.ctrlKey and !e.metaKey and !e.altKey and !e.shiftKey
+                                 if e.which == 101 # ctrl+e
+                                     $("#execute_link").trigger('click');
+                                     return false
+                                 else if e.which == 114 # ctrl+r
+                                     $("record_keystrokes_link").trigger('click')
+                                     return false
+                                 
+                             else if IS_RECORDING and e.which != 0
                                  m = {"keypress": e.which}
                                  add_modifiers(m, e)
                                  KEYBOARD_ARRAY.push(m)
-                                 false)
+                                 return false
+        )
     $(document).keydown((e) ->
                             if IS_RECORDING
                                 m = {"keydown": e.which or e.keyCode}
                                 add_modifiers(m, e)
                                 KEYBOARD_ARRAY.push({"keydown": e.which or e.keyCode})
-                                false)
+                                false
+        )
 
     setTimeout(sendKeystrokes, 200);
     bind_record_keystrokes()

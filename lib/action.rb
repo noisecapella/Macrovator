@@ -8,13 +8,20 @@ class Action
   end
 
   def self.verify_args(args)
-    assert(self::Arguments.length, args.length, "Number of arguments")
-    0.until(self::Arguments.length) do |i|
-      expected_arg = self::Arguments[i]
-      actual_arg = args[i]
-      assert(expected_arg.key, actual_arg.key, "Arg " + i.to_s)
+    used_keys = {}
+    
+    self::Arguments.each do |arg_spec|
+      used_keys[arg_spec.key] = arg_spec
+    end
+
+    args.each do |arg|
+      assert(true, used_keys.include?(arg.key))
+      used_keys.delete(arg.key)
     end
     
+    used_keys.values.each do |used_key|
+      assert(true, used_key.optional)
+    end
   end
 
   def self.assert(expected, actual, what = "Something")
