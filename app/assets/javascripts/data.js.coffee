@@ -37,8 +37,8 @@ sendKeystrokes = () ->
     setTimeout(sendKeystrokes, 200);
 
 bind_record_keystrokes = () ->
-    message_is_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording</a>'
-    message_stopped_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>'
+    message_is_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording (ctrl+r)</a>'
+    message_stopped_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes (ctrl+r)</a>'
     
     if IS_RECORDING
         $("#record_keystrokes_div").html(message_is_recording)
@@ -67,8 +67,6 @@ add_modifiers = (m, e) ->
 $ ->
     setInterval(cursorAnimation, 600);
 
-    $("#stop_recording").hide();
-
     $("#action_type_action_type").live('ajax:success', (evt, data, status, xhr) ->
             fields = $('#argument_fields');
         
@@ -92,7 +90,7 @@ $ ->
                                      $("#execute_link").trigger('click');
                                      return false
                                  else if e.which == 114 # ctrl+r
-                                     $("record_keystrokes_link").trigger('click')
+                                     $("#record_keystrokes_link").trigger('click')
                                      return false
                                  
                              else if IS_RECORDING and e.which != 0

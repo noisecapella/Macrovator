@@ -19,10 +19,10 @@ action_types.count.times do |i|
 </p>
 
 <p>
-<%= link_to "Execute one at a time", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
+<%= link_to "Execute one at a time (ctrl+e)", url_for(:controller => :action_lists, :action => :execute, :id => @datum.action_list.id), :remote => true, :id => "execute_link" %>
 </p>
 <div id="record_keystrokes_div">
-  <a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>
+  <a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes (ctrl+r)</a>
 </div>
 <%= 
 # a hidden form so that javascript knows the correct keystrokes id
