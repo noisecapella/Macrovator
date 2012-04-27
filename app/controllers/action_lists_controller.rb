@@ -49,6 +49,8 @@ class ActionListsController < ApplicationController
       elsif keys.include?("keypress")
         if keys.include?("ctrl") or keys.include?("meta") or keys.include?("alt")
           key_type = :modified_keypress
+        elsif key_number < 32
+          key_type = nil
         else
           key_type = :keypress
         end
