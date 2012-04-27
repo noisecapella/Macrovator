@@ -116,8 +116,8 @@ class ActionTypesController < ApplicationController
     arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments
 
     # create temporary arguments to contain data and create fields
-    arguments = arguments_list.map do |pair| 
-      Argument.new(:key => pair[:key], :value => pair[:default_value])
+    arguments = arguments_list.map do |argument_spec| 
+      Argument.new(:key => argument_spec.key, :value => argument_spec.default_value)
     end
 
   end

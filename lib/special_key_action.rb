@@ -1,6 +1,6 @@
 class SpecialKeyAction < Action
   Arguments = [
-               {:key => "type", :default => :down, :optional => false}
+               ArgumentSpec.new("type", :down, false)
               ]
   Id = 4
   Name = "SpecialKey"
@@ -104,7 +104,7 @@ class SpecialKeyAction < Action
     action_type.action_type = Id
     argument = Argument.new
     argument_schema = Arguments.first
-    argument.key = argument_schema[:key]
+    argument.key = argument_schema.key
     argument.value = case key_number
                      when 37
                        :left

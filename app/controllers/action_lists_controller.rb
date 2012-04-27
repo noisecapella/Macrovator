@@ -47,7 +47,11 @@ class ActionListsController < ApplicationController
       if keys.include?("keydown")
         key_type = :keydown
       elsif keys.include?("keypress")
-        key_type = :keypress
+        if keys.include?("ctrl") or keys.include?("meta") or keys.include?("alt")
+          key_type = :modified_keypress
+        else
+          key_type = :keypress
+        end
       else
         raise "Key must be keypress or keydown"
       end
@@ -56,6 +60,8 @@ class ActionListsController < ApplicationController
         action_type = SpecialKeyAction::create(key_number, @action_list)
       elsif key_type == :keypress
         action_type = KeyPressAction::create(key_number, @action_list)
+      elsif key_type == :modified_keypress
+        action_type = ModifiedKeyAction::create(key_number, keys, @action_list)
       end
 
       if not action_type.nil?

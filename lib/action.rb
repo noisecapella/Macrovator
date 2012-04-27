@@ -12,7 +12,7 @@ class Action
     0.until(self::Arguments.length) do |i|
       expected_arg = self::Arguments[i]
       actual_arg = args[i]
-      assert(expected_arg[:key], actual_arg.key, "Arg " + i.to_s)
+      assert(expected_arg.key, actual_arg.key, "Arg " + i.to_s)
     end
     
   end
@@ -30,4 +30,7 @@ class Action
   def self.process(user_state, args)
     self.do_process(user_state, args)
   end
+
+  private
+  ArgumentSpec = Struct.new :key, :default, :optional
 end

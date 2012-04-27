@@ -1,6 +1,6 @@
 class KeyPressAction < Action
   Arguments = [
-               {:key => "keynumber", :default => 32, :optional => false}
+               ArgumentSpec.new("keynumber", 32, false)
               ]
   Id = 5
   Name = "KeyPress"
@@ -28,7 +28,7 @@ class KeyPressAction < Action
     action_type.action_list = action_list
     argument = Argument.new
     argument_schema = Arguments.first
-    argument.key = argument_schema[:key]
+    argument.key = argument_schema.key
     argument.value = key_number.chr
     
     action_type.arguments << argument

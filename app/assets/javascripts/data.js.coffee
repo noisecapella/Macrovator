@@ -60,7 +60,7 @@ bind_record_keystrokes = () ->
 add_modifiers = (m, e) ->
     m["ctrl"] = true if e.ctrlKey
     m["alt"] = true if e.altKey
-    m["shift"] = true if e.shiftKey
+    # m["shift"] = true if e.shiftKey
     m["meta"] = true if e.metaKey
 
 
