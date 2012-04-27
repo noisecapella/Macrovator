@@ -63,22 +63,23 @@ add_modifiers = (m, e) ->
     # m["shift"] = true if e.shiftKey
     m["meta"] = true if e.metaKey
 
-
 $ ->
     setInterval(cursorAnimation, 600);
-
-    $("#action_type_action_type").live('ajax:success', (evt, data, status, xhr) ->
-            fields = $('#argument_fields');
-        
-            fields.html(data);
-        );
 
     do_update_content = (evt, data, status, xhr) ->
         update_content(data);
         
+    popup_search = () ->
+        result = prompt("Search for: ", "")
+        url = $("#search_url_hidden_form").attr('action')
+        arguments_obj = {"0" : {"key" : "term", "value" : result}}
+        action_type_obj = {"action_type" : 1, "arguments_attributes" : arguments_obj}
+        $.post(url, {"action_type": action_type_obj}, (data) ->
+               update_content(data))
+
 
     $("#execute_link").live("ajax:success", do_update_content)
-
+    $("#execute_rest_link").live("ajax:success", do_update_content)
     $("#reset_selected").live("ajax:success", do_update_content)
     $("#clear_link").live("ajax:success", do_update_content)
     $("#record_keystrokes_link").live("ajax:success", do_update_content)
@@ -92,7 +93,11 @@ $ ->
                                  else if e.which == 114 # ctrl+r
                                      $("#record_keystrokes_link").trigger('click')
                                      return false
-                                 
+                                 else if e.which == 102 # ctrl+f
+                                     popup_search()
+                                     return false
+                                     
+                                     
                              else if IS_RECORDING and e.which != 0
                                  m = {"keypress": e.which}
                                  add_modifiers(m, e)

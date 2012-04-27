@@ -6,10 +6,13 @@ Site::Application.routes.draw do
 
   resources :action_lists do
     member do
-      get 'reset'
+      post 'reset'
     end
     member do
-      get 'execute'
+      post 'execute'
+    end
+    member do
+      post 'execute_rest'
     end
     member do
       post 'keystrokes'
@@ -25,6 +28,9 @@ Site::Application.routes.draw do
   resources :action_types do
     member do
       get 'select_changed'
+    end
+    collection do
+      post 'create_current'
     end
   end
 

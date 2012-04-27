@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20120418035537) do
     t.integer  "temp_highlight_length"
     t.integer  "current_position"
     t.integer  "last_mark_position"
+    t.string   "last_errors"
     t.integer  "user_id"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false

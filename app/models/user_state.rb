@@ -5,13 +5,14 @@ class UserState < ActiveRecord::Base
   attr_accessible :temp_current_data
   attr_accessible :temp_highlight_start, :temp_highlight_length
   attr_accessible :current_position, :last_mark_position
+  attr_accessible :last_errors
 
   attr_accessible :user
 
   validates :user, :presence => true
 
   def current_action_list
-    ActionList.find_by_id(current_action_list_id)
+    ActionList.find(current_action_list_id)
   end
 
   def reset_count(new_action_list_id)
@@ -21,6 +22,7 @@ class UserState < ActiveRecord::Base
     self.last_mark_position = 0
     self.temp_highlight_start = 0
     self.temp_highlight_length = 0
+    self.last_errors = nil
   end
 
   def reset_text

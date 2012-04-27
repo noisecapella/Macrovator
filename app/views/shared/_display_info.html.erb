@@ -1,5 +1,10 @@
 <%=
 
-("highlight_length = " + h(@user_state.temp_highlight_length.to_s) + ", index = " + h(@user_state.current_action_list_index.to_s) + ", position: " + h(@user_state.current_position.to_s))
+ret = ("highlight_length = " + h(@user_state.temp_highlight_length.to_s) + ", index = " + h(@user_state.current_action_list_index.to_s) + ", position: " + h(@user_state.current_position.to_s))
 
+if not @user_state.errors.nil?
+   ret += "<br /><span class='error'>" + h(@user_state.last_errors.to_s) + "</span>"
+end
+
+ret.html_safe
 %>

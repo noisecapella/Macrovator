@@ -39,11 +39,32 @@ class ActionTypesController < ApplicationController
     switch_action_list(@action_list.id)
   end
 
+  def create_current
+    #fill in some missing params from user_state
+    @action_type = ActionType.new(params[:action_type])
+    user_state = current_user.user_state
+    switch_action_list(user_state.current_action_list.id)
+    @action_type.action_list = user_state.current_action_list
+    @action_type.position = user_state.current_action_list_index
+
+    verify_user(@action_type.action_list.datum.user.id)
+
+    @errors = nil
+    @user_state = user_state
+    if not @action_type.save
+      @errors = @action_type.errors.full_messages.join("\n")
+    end
+
+    respond_to do |format|
+      format.json { render :partial => "shared/content" }
+    end
+  end
+
   # POST /action_types
   # POST /action_types.json
   def create
-    @action_list = current_user.user_state.current_action_list
     @action_type = ActionType.new(params[:action_type])
+
     verify_user(@action_type.action_list.datum.user.id)
 
     respond_to do |format|
@@ -117,7 +138,7 @@ class ActionTypesController < ApplicationController
 
     # create temporary arguments to contain data and create fields
     arguments = arguments_list.map do |argument_spec| 
-      Argument.new(:key => argument_spec.key, :value => argument_spec.default_value)
+      Argument.new(:key => argument_spec.key, :value => argument_spec.default)
     end
 
   end

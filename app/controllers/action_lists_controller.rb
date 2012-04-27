@@ -107,48 +107,78 @@ class ActionListsController < ApplicationController
     render_status(1)
   end
 
+  def execute_rest
+    @action_list = ActionList.find(params[:id])
+    user_state = current_user.user_state
+    switch_action_list(@action_list.id)
+    render_status(@action_list.action_types.count - user_state.current_action_list_index)
+  end
+
   def render_status(execute_count)
     # if execute_count > 0, execute that many action_types. then render
     # content, info and the sidebar, passing it back as json
+    @errors = nil
+
     if execute_count > 0
       switch_action_list(@action_list.id)
 
       user_state = current_user.user_state
     end
     
-    execute_count.times do |i|
-      if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
-        user_state.current_action_list_index = 0
-      end
-      
-      if user_state.invalid?
-        user_state.reset_count(@action_list.id)
-      else
-        current_action_list = user_state.current_action_list
-        
-        current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-
-        begin
-          current_action_type.process(user_state, current_action_type.arguments)
-        rescue RuntimeError => e
-          @errors = "Error: " + e.to_s
+    begin
+      execute_count.times do |i|
+        if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
           user_state.current_action_list_index = 0
+        end
+        
+        if user_state.current_action_list_index == 0
+          user_state.reset(@action_list.id)
+        end
+        
+        if user_state.invalid?
+          user_state.reset_count(@action_list.id)
         else
-          user_state.current_action_list_index += 1
+          if not user_state.in_progress?
+            user_state.reset_count(@action_list.id)
+          end
+
+          current_action_list = user_state.current_action_list
+          
+          current_action_type = current_action_list.action_types[user_state.current_action_list_index]
+
+          begin
+            current_action_type.process(user_state, current_action_type.arguments)
+          rescue RuntimeError => e
+            @errors = "Error: " + e.to_s
+            user_state.current_action_list_index = 0
+          else
+            user_state.current_action_list_index += 1
+          end
+        end
+        
+        if not user_state.save
+          raise user_state.errors.full_messages.join("\n")
+        end
+
+        if not @errors.nil?
+          raise @errors
         end
       end
-      
-      if not user_state.save
-        raise user_state.errors.full_messages.join("\n")
-      end
-
+    rescue RuntimeError => e
+      @errors = e.to_s
     end
     
     if current_user.nil? or current_user.user_state.current_action_list.id != @action_list.id
       @user_state = UserState.new
       @user_state.reset(@action_list.id)
+      @user_state.last_errors = @errors
     else
       @user_state = current_user.user_state
+      @user_state.last_errors = @errors
+
+      if not @user_state.save
+        @user_state.errors += "\nCannot write errors to user_state"
+      end
     end
 
     respond_to do |format|
