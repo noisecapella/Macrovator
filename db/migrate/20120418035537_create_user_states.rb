@@ -16,5 +16,6 @@ class CreateUserStates < ActiveRecord::Migration
       t.timestamps
     end
     add_index :user_states, :user_id
+    add_index :user_states, :current_action_list_id
   end
 end

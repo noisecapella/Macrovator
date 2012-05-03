@@ -1,7 +1,8 @@
 class UserState < ActiveRecord::Base
   belongs_to :user
 
-  attr_accessible :current_action_list_index, :current_action_list_id
+  attr_accessible :current_action_list_index
+  attr_accessible :current_action_list_id
   attr_accessible :temp_current_data
   attr_accessible :temp_highlight_start, :temp_highlight_length
   attr_accessible :current_position, :last_mark_position
@@ -26,7 +27,7 @@ class UserState < ActiveRecord::Base
   end
 
   def reset_text
-    self.temp_current_data = current_action_list.datum.content.gsub("\r\n", "\n")
+    self.temp_current_data = current_action_list.datum.content
   end
 
   def reset(new_action_list_id)

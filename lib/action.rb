@@ -38,6 +38,12 @@ class Action
     self.do_process(user_state, args)
   end
 
-  private
+  protected
   ArgumentSpec = Struct.new :key, :default, :optional
+
+  public
+  AllArguments = [SearchAction, CutAction, PasteAction, KeyPressAction, SpecialKeyAction, ModifiedKeyAction]
+  ActionMap = Hash[ AllArguments.map { |arg| [arg::Id, arg] }]
+
+
 end

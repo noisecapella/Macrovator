@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  command_type: 1
+  command_argument: 
+  order: 1
+
+two:
+  command_type: 1
+  command_argument: 
+  order: 1

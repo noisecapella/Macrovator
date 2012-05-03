@@ -1,33 +1,14 @@
-<b>Action Types</b><br />
-<ol>
-<% 
+<%
 user_state = current_user.user_state
 
 index = user_state.current_action_list_index
 count = @datum.action_list.action_types.count
 
 action_types = @datum.action_list.action_types
-action_types.count.times do |i|
-  action_type = action_types[i] 
-  selected = nil
-  selected_string = ""
 
-  if user_state.current_action_list_id == @datum.action_list.id and (index == i or (index == count and i == count - 1))
-    selected = true
-    selected_string = if index == count
-                        "<div class='selected_bottom'>"
-                      else
-                        "<div class='selected'>"
-                      end
-  end
- %>
-<li>
-<%= (selected_string).to_s.html_safe %>
-   <%= link_to action_type.description, action_type %>
-<%= ("</div>" if selected).to_s.html_safe %>
-</li>
-<% end %>
-</ol>
+%>
+
+<b>Action Types</b><br />
 <p>
 <%= link_to 'New action', new_action_type_path(:action_list_id => @datum.action_list.id, :position => count) %>
 
@@ -59,6 +40,31 @@ form_tag(url_for(:controller => :action_types, :action => :create_current), :id 
 <p>
 <%= link_to "Clear", url_for(:controller => :action_lists, :action =>:clear, :id => @datum.action_list.id), :remote => true, :id => "clear_link", :confirm => "Are you sure you want to clear the action types?", :method => :post %>
 </p>
+
+<ol>
+<% 
+action_types.count.times do |i|
+  action_type = action_types[i] 
+  selected = nil
+  selected_string = ""
+
+  if user_state.current_action_list_id == @datum.action_list.id and (index == i or (index == count and i == count - 1))
+    selected = true
+    selected_string = if index == count
+                        "<div class='selected_bottom'>"
+                      else
+                        "<div class='selected'>"
+                      end
+  end
+ %>
+<li>
+<%= (selected_string).to_s.html_safe %>
+   <%= link_to action_type.description, action_type %>
+<%= ("</div>" if selected).to_s.html_safe %>
+</li>
+<% end %>
+</ol>
+
 <script type="text/javascript">
 $(document).ready(function() {
 

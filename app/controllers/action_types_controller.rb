@@ -132,7 +132,7 @@ class ActionTypesController < ApplicationController
 
   private
   def populate_arguments(action_type_id)
-    arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments
+    arguments_list = Action::ActionMap[action_type_id.to_i]::Arguments
 
     # create temporary arguments to contain data and create fields
     arguments = arguments_list.map do |argument_spec| 

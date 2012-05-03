@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20120503181650) do
     t.datetime "updated_at",                :null => false
   end
 
+  add_index "user_states", ["current_action_list_id"], :name => "index_user_states_on_current_action_list_id"
   add_index "user_states", ["user_id"], :name => "index_user_states_on_user_id"
 
   create_table "users", :force => true do |t|
