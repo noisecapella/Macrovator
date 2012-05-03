@@ -130,8 +130,6 @@ class ActionTypesController < ApplicationController
     end
   end
 
-
-
   private
   def populate_arguments(action_type_id)
     arguments_list = Constants::ActionMap[action_type_id.to_i]::Arguments

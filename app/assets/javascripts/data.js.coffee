@@ -57,6 +57,21 @@ bind_record_keystrokes = () ->
         bind_record_keystrokes()
     );
 
+
+popup_search = () ->
+    result = prompt("Search for: ", "")
+    if result
+        url = $("#search_url_hidden_form").attr('action')
+        arguments_obj = {"0" : {"key" : "term", "value" : result}}
+        action_type_obj = {"action_type" : 1, "arguments_attributes" : arguments_obj}
+        $.post(url, {"action_type": action_type_obj}, (data) ->
+           update_content(data))
+
+delete_action = () ->
+    url = $("#delete_action_hidden_form").attr('action')
+    $.post(url, {}, (data) ->
+           update_content(data))
+
 add_modifiers = (m, e) ->
     m["ctrl"] = true if e.ctrlKey
     m["alt"] = true if e.altKey
@@ -69,14 +84,6 @@ $ ->
     do_update_content = (evt, data, status, xhr) ->
         update_content(data);
         
-    popup_search = () ->
-        result = prompt("Search for: ", "")
-        url = $("#search_url_hidden_form").attr('action')
-        arguments_obj = {"0" : {"key" : "term", "value" : result}}
-        action_type_obj = {"action_type" : 1, "arguments_attributes" : arguments_obj}
-        $.post(url, {"action_type": action_type_obj}, (data) ->
-               update_content(data))
-
 
     $("#execute_link").live("ajax:success", do_update_content)
     $("#execute_rest_link").live("ajax:success", do_update_content)
@@ -95,6 +102,12 @@ $ ->
                                      return false
                                  else if e.which == 102 # ctrl+f
                                      popup_search()
+                                     return false
+                                 else if e.which == 100 # ctrl+d
+                                     delete_action()
+                                     return false
+                                 else if e.which == 122 # ctrl+z
+                                     preform_undo()
                                      return false
                                      
                                      

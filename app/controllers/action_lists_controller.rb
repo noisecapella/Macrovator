@@ -116,7 +116,21 @@ class ActionListsController < ApplicationController
     render_status(@action_list.action_types.count - user_state.current_action_list_index)
   end
 
-  def render_status(execute_count)
+  def delete_current_action_type
+    @action_list = ActionList.find(params[:id])
+    user_state = current_user.user_state
+    switch_action_list(@action_list.id)
+    
+    index = user_state.current_action_list_index
+    if index >= 0 and index < user_state.current_action_list.action_types.count
+      action_type = user_state.current_action_list.action_types[index]
+      action_type.destroy
+    end
+
+    render_status
+  end
+
+  def render_status(execute_count = 0)
     # if execute_count > 0, execute that many action_types. then render
     # content, info and the sidebar, passing it back as json
     @errors = nil
@@ -129,16 +143,12 @@ class ActionListsController < ApplicationController
     
     begin
       execute_count.times do |i|
-        if user_state.current_action_list_index >= user_state.current_action_list.action_types.count
-          user_state.current_action_list_index = 0
-        end
-        
         if user_state.current_action_list_index == 0
           user_state.reset(@action_list.id)
         end
         
         if user_state.invalid?
-          user_state.reset_count(@action_list.id)
+          user_state.reset(@action_list.id)
         else
           if not user_state.in_progress?
             user_state.reset_count(@action_list.id)

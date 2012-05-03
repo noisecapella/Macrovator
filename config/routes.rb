@@ -23,6 +23,9 @@ Site::Application.routes.draw do
     member do
       get 'status'
     end
+    member do
+      post 'delete_current_action_type'
+    end
   end
 
   resources :action_types do

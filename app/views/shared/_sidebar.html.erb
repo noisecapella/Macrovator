@@ -1,20 +1,35 @@
 <b>Action Types</b><br />
+<ol>
 <% 
 user_state = current_user.user_state
 
+index = user_state.current_action_list_index
+count = @datum.action_list.action_types.count
+
 action_types = @datum.action_list.action_types
 action_types.count.times do |i|
-   action_type = action_types[i] 
-   selected = (user_state.current_action_list_id == @datum.action_list.id and (user_state.current_action_list_index == i or (user_state.current_action_list_index == user_state.current_action_list.action_types.count and i == 0)))
- %>
-<%= ("<span class='selected'>" if selected).to_s.html_safe %>
-   <%= link_to action_type.description, action_type %>
-<%= ("</span>" if selected).to_s.html_safe %>
-<br />
-<% end %>
+  action_type = action_types[i] 
+  selected = nil
+  selected_string = ""
 
+  if user_state.current_action_list_id == @datum.action_list.id and (index == i or (index == count and i == count - 1))
+    selected = true
+    selected_string = if index == count
+                        "<div class='selected_bottom'>"
+                      else
+                        "<div class='selected'>"
+                      end
+  end
+ %>
+<li>
+<%= (selected_string).to_s.html_safe %>
+   <%= link_to action_type.description, action_type %>
+<%= ("</div>" if selected).to_s.html_safe %>
+</li>
+<% end %>
+</ol>
 <p>
-<%= link_to 'New action', new_action_type_path(:action_list_id => @datum.action_list.id, :position => @datum.action_list.action_types.count) %>
+<%= link_to 'New action', new_action_type_path(:action_list_id => @datum.action_list.id, :position => count) %>
 
 </p>
 
@@ -35,7 +50,9 @@ form_tag(url_for(:controller => :action_lists, :action =>:keystrokes, :id => @da
 form_tag(url_for(:controller => :action_types, :action => :create_current), :id => "search_url_hidden_form") do
 %>
 <% end %>
-
+<%= 
+      form_tag(url_for(:controller => :action_lists, :action => :delete_current_action_type, :id => @datum.action_list.id), :id => "delete_action_hidden_form") do %>
+<% end %>
 <p>
 <%= link_to "Reset", url_for(:controller => :action_lists, :action => :reset, :id => @datum.action_list.id), :remote => true, :id => "reset_selected", :method => :post %>
 </p>
