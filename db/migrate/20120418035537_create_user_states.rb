@@ -2,7 +2,7 @@ class CreateUserStates < ActiveRecord::Migration
   def change
     create_table :user_states do |t|
       t.integer :current_action_list_index
-      t.integer :current_action_list_id
+      t.references :current_action_list
       t.text :temp_current_data
       t.integer :temp_highlight_start
       t.integer :temp_highlight_length
@@ -11,9 +11,10 @@ class CreateUserStates < ActiveRecord::Migration
       t.string :last_errors
 
 
-      t.integer :user_id
+      t.references :user
 
       t.timestamps
     end
+    add_index :user_states, :user_id
   end
 end

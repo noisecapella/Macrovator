@@ -3,9 +3,10 @@ class CreateArguments < ActiveRecord::Migration
     create_table :arguments do |t|
       t.string :key
       t.string :value
-      t.integer :action_type_id
+      t.references :action_type
 
       t.timestamps
     end
+    add_index :arguments, :action_type_id
   end
 end

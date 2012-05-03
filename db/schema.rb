@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120418035537) do
+ActiveRecord::Schema.define(:version => 20120503181650) do
 
   create_table "action_lists", :force => true do |t|
     t.integer  "datum_id"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20120418035537) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "action_lists", ["datum_id"], :name => "index_action_lists_on_datum_id"
 
   create_table "action_types", :force => true do |t|
     t.integer  "action_type"
@@ -28,12 +30,33 @@ ActiveRecord::Schema.define(:version => 20120418035537) do
     t.datetime "updated_at",     :null => false
   end
 
+  add_index "action_types", ["action_list_id"], :name => "index_action_types_on_action_list_id"
+
   create_table "arguments", :force => true do |t|
     t.string   "key"
     t.string   "value"
     t.integer  "action_type_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  add_index "arguments", ["action_type_id"], :name => "index_arguments_on_action_type_id"
+
+  create_table "command_arguments", :force => true do |t|
+    t.string   "key"
+    t.string   "value"
+    t.integer  "command_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "command_arguments", ["command_id"], :name => "index_command_arguments_on_command_id"
+
+  create_table "commands", :force => true do |t|
+    t.integer  "command_type"
+    t.integer  "order"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "data", :force => true do |t|
@@ -43,6 +66,8 @@ ActiveRecord::Schema.define(:version => 20120418035537) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "data", ["user_id"], :name => "index_data_on_user_id"
 
   create_table "user_states", :force => true do |t|
     t.integer  "current_action_list_index"
@@ -57,6 +82,8 @@ ActiveRecord::Schema.define(:version => 20120418035537) do
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
   end
+
+  add_index "user_states", ["user_id"], :name => "index_user_states_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email"

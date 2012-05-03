@@ -3,9 +3,10 @@ class CreateData < ActiveRecord::Migration
     create_table :data do |t|
       t.text :content
       t.text :title
-      t.integer :user_id
+      t.references :user
 
       t.timestamps
     end
+    add_index :data, :user_id
   end
 end
