@@ -1,10 +1,16 @@
 class CreateCommands < ActiveRecord::Migration
-  def change
+  def self.up
     create_table :commands do |t|
-      t.integer :command_type
+      t.string :type
       t.integer :order
+      t.references :user_state
 
       t.timestamps
     end
+    add_index :commands, :user_state_id
+  end
+
+  def self.down
+    drop_table :commands
   end
 end

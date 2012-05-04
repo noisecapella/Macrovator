@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120503181650) do
+ActiveRecord::Schema.define(:version => 20120503181617) do
 
   create_table "action_lists", :force => true do |t|
     t.integer  "datum_id"
@@ -42,22 +42,15 @@ ActiveRecord::Schema.define(:version => 20120503181650) do
 
   add_index "arguments", ["action_type_id"], :name => "index_arguments_on_action_type_id"
 
-  create_table "command_arguments", :force => true do |t|
-    t.string   "key"
-    t.string   "value"
-    t.integer  "command_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "command_arguments", ["command_id"], :name => "index_command_arguments_on_command_id"
-
   create_table "commands", :force => true do |t|
-    t.integer  "command_type"
+    t.string   "type"
     t.integer  "order"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer  "user_state_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
+
+  add_index "commands", ["user_state_id"], :name => "index_commands_on_user_state_id"
 
   create_table "data", :force => true do |t|
     t.text     "content"
@@ -68,6 +61,13 @@ ActiveRecord::Schema.define(:version => 20120503181650) do
   end
 
   add_index "data", ["user_id"], :name => "index_data_on_user_id"
+
+  create_table "delete_commands", :force => true do |t|
+  end
+
+  create_table "insert_commands", :force => true do |t|
+    t.integer "insert_index"
+  end
 
   create_table "user_states", :force => true do |t|
     t.integer  "current_action_list_index"
@@ -92,6 +92,25 @@ ActiveRecord::Schema.define(:version => 20120503181650) do
     t.string   "password_digest"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_view "view_delete_commands", "CREATE VIEW \"view_delete_commands\" AS SELECT commands.id, \"type\",\"order\",\"user_state_id\",\"created_at\",\"updated_at\" FROM commands, delete_commands WHERE commands.id = delete_commands.id", :force => true do |v|
+    v.column :id
+    v.column :type
+    v.column :order
+    v.column :user_state_id
+    v.column :created_at
+    v.column :updated_at
+  end
+
+  create_view "view_insert_commands", "CREATE VIEW \"view_insert_commands\" AS SELECT commands.id, \"type\",\"order\",\"user_state_id\",\"created_at\",\"updated_at\",\"insert_index\" FROM commands, insert_commands WHERE commands.id = insert_commands.id", :force => true do |v|
+    v.column :id
+    v.column :type
+    v.column :order
+    v.column :user_state_id
+    v.column :created_at
+    v.column :updated_at
+    v.column :insert_index
   end
 
 end

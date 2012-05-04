@@ -53,8 +53,16 @@ class ActionTypesController < ApplicationController
     @user_state = user_state
     if not @action_type.save
       @errors = @action_type.errors.full_messages.join("\n")
+    else
+      count = @user_state.commands.count
+      InsertCommand.new do |command|
+        command.user_state = @user_state
+        command.order = count
+        command.insert_index = @user_state.current_action_list_index
+        command.save
+      end
     end
-
+    
     respond_to do |format|
       format.json { render :partial => "shared/content" }
     end
@@ -69,6 +77,13 @@ class ActionTypesController < ApplicationController
 
     respond_to do |format|
       if @action_type.save
+        InsertCommand.new do |command|
+          command.user_state = current_user.user_state
+          command.order = current_user.user_state.commands.count
+          command.insert_index = @action_type.position
+          command.save
+        end
+
         format.html { redirect_to @action_type, notice: 'Action type was successfully created.' }
         format.json { render json: @action_type, status: :created, location: @action_type }
       else

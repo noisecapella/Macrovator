@@ -20,7 +20,7 @@
      @user.data.slice(from...to).each do |datum|
 %>
 <li class="data_row">
-  <span class="title"><%= link_to 'Data piece ' + datum.id.to_s, datum %></span>
+  <span class="title"><%= link_to datum.title, datum %></span>
 </li>
 <% end
   else

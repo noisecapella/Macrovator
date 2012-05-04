@@ -7,6 +7,8 @@ class UserState < ActiveRecord::Base
   attr_accessible :temp_highlight_start, :temp_highlight_length
   attr_accessible :current_position, :last_mark_position
   attr_accessible :last_errors
+  attr_accessible :commands
+  has_many :commands
 
   attr_accessible :user
 
@@ -33,6 +35,13 @@ class UserState < ActiveRecord::Base
   def reset(new_action_list_id)
     reset_count(new_action_list_id)
     reset_text
+    reset_commands
+  end
+
+  def reset_commands
+    self.commands.each do |command|
+      command.destroy
+    end
   end
 
   def invalid?

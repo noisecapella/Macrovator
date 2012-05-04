@@ -88,6 +88,13 @@ class ActionListsController < ApplicationController
         action_type.position = position
         if not action_type.save
           raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
+        else
+          InsertCommand.new do |command|
+            command.user_state = current_user.user_state
+            command.order = current_user.user_state.commands.count
+            command.insert_index = action_type.position
+            command.save
+          end
         end
         
         success_key_count += 1
