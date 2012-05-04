@@ -1,16 +1,18 @@
-class SpecialKeyAction < Action
-  Arguments = [
-               ArgumentSpec.new("type", :down, false)
-              ]
-  Id = 4
-  Name = "SpecialKey"
+class SpecialKeyActionType < ActionType
+  acts_as_citier
 
-  def self.do_describe(args)
-    "Keypress " + args.first.value.to_s
+  attr_accessible :keytype
+
+  KeytypeMap = {40 => :down, 38 => :up, 37 => :left, 39 => :right, 8 => :backspace, 13 => :enter, 46 => :delete}
+
+  validates :keytype, :inclusion => {:in => self::KeytypeMap.keys}
+
+  def describe
+    "Keypress #{self::KeytypeMap[self.keytype].to_s}"
   end
-  
-  def self.do_process(user_state, args)
-    key_type = args.first.value.to_sym
+
+  def process(user_state)
+    key_type = self::KeytypeMap[self.keytype]
     data = user_state.temp_current_data
     current_position = user_state.current_position
     
@@ -99,34 +101,15 @@ class SpecialKeyAction < Action
     user_state.temp_current_data = data
   end
 
-  def self.create(key_number, action_list)
-    action_type = ActionType.new
-    action_type.action_list = action_list
-    action_type.action_type = Id
-    argument = Argument.new
-    argument_schema = Arguments.first
-    argument.key = argument_schema.key
-    argument.value = case key_number
-                     when 37
-                       :left
-                     when 38
-                       :up
-                     when 39
-                       :right
-                     when 40
-                       :down
-                     when 8
-                       :backspace
-                     when 13
-                       :enter
-                     when 46
-                       :delete
-                     end
-    action_type.arguments << argument
-    if argument.value.nil?
-      nil
-    else
-      action_type
-    end
+  def self.my_name
+    "SpecialKey"
   end
+
+  def make_arguments
+    #TODO: improve this
+    [
+     Argument.new("keytype", "Special key", self.keytype || 40)
+    ]
+  end
+
 end

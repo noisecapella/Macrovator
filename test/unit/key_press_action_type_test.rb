@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ArgumentTest < ActiveSupport::TestCase
+class KeyPressActionTypeTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

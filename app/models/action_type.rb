@@ -1,30 +1,22 @@
 class ActionType < ActiveRecord::Base
   default_scope order('position ASC')
+  acts_as_citier
 
   belongs_to :action_list
-  has_many :arguments, :dependent => :destroy
-  accepts_nested_attributes_for :arguments, :allow_destroy => true, :reject_if => lambda { |a| a[:key].blank? or a[:value].blank? }
 
-  attr_accessible :action_type, :action_list, :action_list_id, :action_type, :arguments_attributes, :position
+  attr_accessible :action_list, :position, :type
 
-  validates :action_type, :inclusion => {:in => Action::ActionMap.keys, :message => "Invalid action type"}
-  validates :action_list_id, :presence => true
+  validates :action_list, :presence => true
   validates :position, :presence => true
   #validates :arguments, :presence => true
 
-  def my_name
-    action = Action::ActionMap[action_type]
-    action ? action.to_s : "Undefined"
+  #TODO: figure out a better way to do this
+  AllActionTypes = [SearchActionType, CutActionType, PasteActionType, KeyPressActionType, 
+                    SpecialKeyActionType, ModifiedKeyActionType]
+
+  def self.my_type
+    self.to_s
   end
 
-  def description
-    action = Action::ActionMap[action_type]
-    action ? action.describe(arguments) : "Undefined"
-    
-  end
-
-  def process(user, args)
-    action = Action::ActionMap[action_type]
-    action.process(user, args)
-  end
+  Argument = Struct.new :key, :name, :value
 end

@@ -17,9 +17,7 @@ class ActionTypesController < ApplicationController
     @position = params[:position].to_i
     @action_list = current_user.user_state.current_action_list
     
-    @action_type = ActionType.new(:action_list => @action_list,
-                                  :action_type => SearchAction::Id)
-    @action_type.arguments = populate_arguments(@action_type.action_type)
+    @action_type = SearchActionType.new(:action_list => @action_list)
 
     render_new
   end
@@ -135,7 +133,6 @@ class ActionTypesController < ApplicationController
     if @action_list.nil? or @action_type.nil?
       @action_type = ActionType.new(:action_type => action_type_type)
       @action_type.action_list = @action_list
-      @action_type.arguments = populate_arguments(@action_type.action_type)
     end
 
     respond_to do |format|
@@ -143,16 +140,5 @@ class ActionTypesController < ApplicationController
         render :partial => true
       }
     end
-  end
-
-  private
-  def populate_arguments(action_type_id)
-    arguments_list = Action::ActionMap[action_type_id.to_i]::Arguments
-
-    # create temporary arguments to contain data and create fields
-    arguments = arguments_list.map do |argument_spec| 
-      Argument.new(:key => argument_spec.key, :value => argument_spec.default)
-    end
-
   end
 end

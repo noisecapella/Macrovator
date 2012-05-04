@@ -2,7 +2,7 @@
 
 <p>
   <b>Action type:</b>
-  <%= @action_type.my_name %>
+  <%= @action_type.describe %>
 </p>
 
 <p>
@@ -13,7 +13,7 @@
 <p>
   <b>Arguments</b>
 <ul>
-<% for argument in @action_type.arguments %>
+<% for argument in @action_type.make_arguments %>
   <li><b><%= argument.key.capitalize %></b>: <%= argument.value %></li>
 <% end %>
 </ul>

@@ -1,16 +1,14 @@
-class SearchAction < Action
-  Arguments = [
-               ArgumentSpec.new("term", "", false)
-              ]
-  Id = 1
-  Name = "Search"
+class SearchActionType < ActionType
+  acts_as_citier
 
-  def self.do_describe(args)
-    "Search for '" + args.first.value.to_s + "'"
+  attr_accessible :search_key
+
+  def describe
+    "Search for '#{self.search_key}'"
   end
 
-  def self.do_process(user_state, args)
-    key = args.first.value.to_s
+  def process(user_state)
+    key = self.search_key
     data = user_state.temp_current_data
 
     index = data.index(key, user_state.current_position)
@@ -23,5 +21,15 @@ class SearchAction < Action
       user_state.temp_highlight_length = key.length
       user_state.current_position = index
     end
+  end
+
+  def self.my_name
+    "Search"
+  end
+
+  def make_arguments
+    [
+     Argument.new("search_key", "Search", self.search_key)
+    ]
   end
 end

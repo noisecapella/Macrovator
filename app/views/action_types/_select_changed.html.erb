@@ -1,10 +1,14 @@
 <%= fields_for @action_type do |f| %>
 <p>
-  <%= f.fields_for :arguments, @action_type.arguments do |argument_fields| %>
-  <%= argument_fields.label :key, argument_fields.object.key %>
-  <%= argument_fields.hidden_field :key %>
-  <%= argument_fields.text_field :value, :value => argument_fields.object.value %>
-  <% end %>
+<% 
+arguments = @action_type.make_arguments
+arguments.each do |arg|
+%>
+<%= label_tag :key, arg.name.to_s %>
+<%= hidden_field_tag :key, arg.key.to_s %>
+<%= text_field_tag :value, arg.value.to_s %>
+
+<% end %>
 </p>
 <% end %>
 

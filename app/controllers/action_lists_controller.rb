@@ -59,20 +59,15 @@ class ActionListsController < ApplicationController
       end
 
       if key_type == :keydown
-        action_type = SpecialKeyAction::create(key_number, @action_list)
+        action_type = SpecialKeyActionType.new(:keytype => key_number, :action_list => @action_list)
       elsif key_type == :keypress
-        action_type = KeyPressAction::create(key_number, @action_list)
+        action_type = KeyPressActionType.new(:keys => key_number.chr, :action_list => @action_list)
       elsif key_type == :modified_keypress
-        action_type = ModifiedKeyAction::create(key_number, keys, @action_list)
+        metakeys = ModifiedKeyActionType::make_metakeys_value(keys.include?("ctrl"), keys.include?("meta"), keys.include?("alt"))
+        action_type = ModifiedKeyActionType::create(:keys => key_number.chr, :metakeys => metakeys, :action_list => @action_list)
       end
 
       if not action_type.nil?
-
-        action_type.arguments.each do |arg|
-          if not arg.save
-            raise "Cannot save arg: " + arg.errors.full_messages.to_s
-          end
-        end
         
         position = user_state.current_action_list_index
         @action_list.action_types.each do |a|
@@ -166,7 +161,7 @@ class ActionListsController < ApplicationController
           current_action_type = current_action_list.action_types[user_state.current_action_list_index]
 
           begin
-            current_action_type.process(user_state, current_action_type.arguments)
+            current_action_type.process(user_state)
           rescue RuntimeError => e
             @errors = "Error: " + e.to_s
             user_state.current_action_list_index = 0

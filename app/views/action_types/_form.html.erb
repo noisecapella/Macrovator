@@ -1,4 +1,4 @@
-<%= form_for(@action_type) do |f| %>
+<%= form_for :action_type do |f| %>
   <% if @action_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@action_type.errors.count, "error") %> prohibited this action_type from being saved:</h2>
@@ -13,7 +13,7 @@
   <div class="field">
     <%= f.label :action_type %><br />
     <%= select_tag :action_type_action_type,
-	options_from_collection_for_select(Action::AllArguments, :id, :my_name),
+	options_from_collection_for_select(ActionType::AllActionTypes, :my_type, :my_name),
 	:name => "action_type[action_type]",
 	:'data-remote' => 'true',
     :'data-url' => url_for(:controller => :action_types, :action => :select_changed, :id => @action_list.id),

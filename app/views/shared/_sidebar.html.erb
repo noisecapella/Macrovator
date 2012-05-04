@@ -59,7 +59,7 @@ action_types.count.times do |i|
  %>
 <li>
 <%= (selected_string).to_s.html_safe %>
-   <%= link_to action_type.description, action_type %>
+   <%= link_to action_type.describe, url_for(:controller => :action_types, :action => :show, :id => action_type.id) %>
 <%= ("</div>" if selected).to_s.html_safe %>
 </li>
 <% end %>
