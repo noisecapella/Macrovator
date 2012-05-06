@@ -14,7 +14,7 @@ class ActionListsController < ApplicationController
       raise @user_state.errors.full_messages.to_s
     end
 
-    render_status(0)
+    render_status
   end
 
   def reset
@@ -29,7 +29,7 @@ class ActionListsController < ApplicationController
       notice = user_state.errors.full_messages.join("\n")
     end
 
-    render_status(0)
+    render_status
   end
 
   def keystrokes
@@ -41,6 +41,7 @@ class ActionListsController < ApplicationController
 
     success_key_count = 0
 
+    any_alter_command_in_place = false
     key_values = params[:keys].values
     key_values.each do |keys|
       key_number = (keys["keydown"] or keys["keypress"]).to_i
@@ -58,10 +59,20 @@ class ActionListsController < ApplicationController
         raise "Key must be keypress or keydown"
       end
 
+      alter_command_in_place = false
       if key_type == :keydown and SpecialKeyActionType::KeytypeMap.include?(key_number)
         action_type = SpecialKeyActionType.new(:keytype => key_number, :action_list => @action_list)
       elsif key_type == :keypress
-        action_type = KeyPressActionType.new(:keys => key_number.chr, :action_list => @action_list)
+        current_index = user_state.current_action_list_index
+
+        if @action_list.action_types.count > 0 and current_index > 0 and current_index <= @action_list.action_types.count and @action_list.action_types[current_index - 1].is_keypress?
+          action_type = @action_list.action_types[current_index - 1]
+          action_type.keys += key_number.chr
+          alter_command_in_place = true
+          any_alter_command_in_place = true
+        else
+          action_type = KeyPressActionType.new(:keys => key_number.chr, :action_list => @action_list)
+        end
       elsif key_type == :modified_keypress
         metakeys = ModifiedKeyActionType::make_metakeys_value(keys.include?("ctrl"), keys.include?("meta"), keys.include?("alt"))
         action_type = ModifiedKeyActionType::create(:keys => key_number.chr, :metakeys => metakeys, :action_list => @action_list)
@@ -69,18 +80,20 @@ class ActionListsController < ApplicationController
 
       if not action_type.nil?
         
-        position = user_state.current_action_list_index
-        @action_list.action_types.each do |a|
-          # TODO: what if some positions don't get saved successfully? corruption?
-          if a.position >= position
-            a.position = a.position + 1
-            if not a.save
-              raise "Cannot save action_type while updating position: " + a.errors.full_messages.to_s
+        if not alter_command_in_place
+          position = user_state.current_action_list_index
+          @action_list.action_types.each do |a|
+            # TODO: what if some positions don't get saved successfully? corruption?
+            if a.position >= position
+              a.position = a.position + 1
+              if not a.save
+                raise "Cannot save action_type while updating position: " + a.errors.full_messages.to_s
+              end
             end
           end
-        end
 
-        action_type.position = position
+          action_type.position = position
+        end
         if not action_type.save
           raise "Cannot save action_type: " + action_type.errors.full_messages.to_s
         else
@@ -92,30 +105,33 @@ class ActionListsController < ApplicationController
           end
         end
         
-        success_key_count += 1
+        if not any_alter_command_in_place
+          success_key_count += 1
+        end
       end
     end
 
-    render_status(success_key_count)
+    
+    render_status(true, success_key_count, any_alter_command_in_place)
   end
 
   def status
     @action_list = ActionList.find(params[:id])
 
-    render_status(0)
+    render_status
   end
 
   def execute
     @action_list = ActionList.find(params[:id])
 
-    render_status(1)
+    render_status(true, 1, false)
   end
 
   def execute_rest
     @action_list = ActionList.find(params[:id])
     user_state = current_user.user_state
     switch_action_list(@action_list.id)
-    render_status(@action_list.action_types.count - user_state.current_action_list_index)
+    render_status(true, @action_list.action_types.count - user_state.current_action_list_index, false)
   end
 
   def delete_current_action_type
@@ -132,17 +148,25 @@ class ActionListsController < ApplicationController
     render_status
   end
 
-  def render_status(execute_count = 0)
+  def render_status(do_execute = false, execute_count = 0, any_alter_command_in_place = false)
     # if execute_count > 0, execute that many action_types. then render
     # content, info and the sidebar, passing it back as json
+    print "render_status(" + execute_count.to_s + ", " + any_alter_command_in_place.to_s + ")"
     @errors = nil
 
-    if execute_count > 0
+
+    if do_execute
       switch_action_list(@action_list.id)
 
       user_state = current_user.user_state
+
+      if any_alter_command_in_place
+        index = user_state.current_action_list_index
+        user_state.reset(@action_list.id)
+        execute_count += index
+      end
     end
-    
+
     begin
       execute_count.times do |i|
         if user_state.current_action_list_index == 0

@@ -22,4 +22,8 @@ class ActionType < ActiveRecord::Base
   end
 
   Argument = Struct.new :key, :name, :value
+
+  def is_keypress?
+    false
+  end
 end
