@@ -58,7 +58,7 @@ class ActionListsController < ApplicationController
         raise "Key must be keypress or keydown"
       end
 
-      if key_type == :keydown
+      if key_type == :keydown and SpecialKeyActionType::KeytypeMap.include?(key_number)
         action_type = SpecialKeyActionType.new(:keytype => key_number, :action_list => @action_list)
       elsif key_type == :keypress
         action_type = KeyPressActionType.new(:keys => key_number.chr, :action_list => @action_list)

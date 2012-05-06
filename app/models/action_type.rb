@@ -11,8 +11,11 @@ class ActionType < ActiveRecord::Base
   #validates :arguments, :presence => true
 
   #TODO: figure out a better way to do this
-  AllActionTypes = [SearchActionType, CutActionType, PasteActionType, KeyPressActionType, 
-                    SpecialKeyActionType, ModifiedKeyActionType]
+  def self.get_action_types
+    # this can't be a constant because we can't refer to types of subclasses before they exist
+    [SearchActionType, CutActionType, PasteActionType, KeyPressActionType, 
+     SpecialKeyActionType, ModifiedKeyActionType]
+  end
 
   def self.my_type
     self.to_s

@@ -1,18 +1,19 @@
 class SpecialKeyActionType < ActionType
   acts_as_citier
 
-  attr_accessible :keytype
-
   KeytypeMap = {40 => :down, 38 => :up, 37 => :left, 39 => :right, 8 => :backspace, 13 => :enter, 46 => :delete}
 
-  validates :keytype, :inclusion => {:in => self::KeytypeMap.keys}
+  attr_accessible :keytype
+
+  validates :keytype, :inclusion => {:in => KeytypeMap.keys}
 
   def describe
-    "Keypress #{self::KeytypeMap[self.keytype].to_s}"
+    keypress_string = KeytypeMap[self.keytype].to_s
+    "Keypress #{keypress_string}"
   end
 
   def process(user_state)
-    key_type = self::KeytypeMap[self.keytype]
+    key_type = KeytypeMap[self.keytype]
     data = user_state.temp_current_data
     current_position = user_state.current_position
     
