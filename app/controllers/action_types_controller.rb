@@ -39,7 +39,7 @@ class ActionTypesController < ApplicationController
 
   def create_current
     #fill in some missing params from user_state
-    @action_type = ActionType.new(params[:action_type])
+    @action_type = ActionType.factory_create(params[:action_type])
     user_state = current_user.user_state
     switch_action_list(user_state.current_action_list.id)
     @action_type.action_list = user_state.current_action_list

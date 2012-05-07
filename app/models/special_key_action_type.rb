@@ -89,6 +89,7 @@ class SpecialKeyActionType < ActionType
       if user_state.temp_highlight_length > 0 and user_state.temp_highlight_start >= user_state.current_position
         user_state.temp_highlight_start += 1
       end
+      user_state.current_position += 1
     end
 
     if user_state.current_position < 0

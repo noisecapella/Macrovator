@@ -62,8 +62,7 @@ popup_search = () ->
     result = prompt("Search for: ", "")
     if result
         url = $("#search_url_hidden_form").attr('action')
-        arguments_obj = {"0" : {"key" : "term", "value" : result}}
-        action_type_obj = {"action_type" : 1, "arguments_attributes" : arguments_obj}
+        action_type_obj = {"type" : "SearchActionType", "search_key" : result}
         $.post(url, {"action_type": action_type_obj}, (data) ->
            update_content(data))
 

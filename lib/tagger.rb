@@ -1,17 +1,25 @@
 class Tagger
-  InsertionPoint = Struct.new :str, :pos, :is_html_safe, :distance_from_start_tag
+  Tag = Struct.new :start_tag_str, :end_tag_str, :start_pos, :end_pos
 
   def initialize(content)
     @content = content
-    @insertions = []
+    @insertions = {}
+    @replace_spaces_with_tags = false
+  end
+
+  def add_insertion(pos, tag)
+    if not @insertions.include? pos
+      @insertions[pos] = [tag]
+    else
+      @insertions[pos] << tag
+    end
   end
 
   def add_tags(str, pos, end_str, end_pos)
-    start_tag = InsertionPoint.new(str, pos, true, nil)
-    end_tag = InsertionPoint.new(end_str, end_pos, true, end_pos - start_tag.pos)
+    tag = Tag.new(str, end_str, pos, end_pos)
 
-    @insertions << start_tag
-    @insertions << end_tag
+    add_insertion(pos, tag)
+    add_insertion(end_pos, tag)
   end
 
   def add_global_replace(from, to, is_html_safe = true)
@@ -23,20 +31,46 @@ class Tagger
     end
   end
 
+  def replace_spaces_with_tags
+    @replace_spaces_with_tags = true
+  end
+
   def display_content
-    sorted_insertions = @insertions.sort { |a, b| a.pos <=> b.pos }.reverse
-
-    content = @content.dup
-
-    sorted_insertions.inject(content) do |t, x|
-      if x.distance_from_start_tag == 1 and t[x.pos-1...x.pos] == " "
-        # preserve space
-        t.insert(x.pos, x.str + " ")
-      else
-        t.insert(x.pos, x.str)
+    ret = "<p>"
+    @content.length.times do |i|
+      c = @content[i]
+      already_wrote_char = false
+      if @replace_spaces_with_tags and (c == "\n" or c == " " or c == "\t")
+        if c == "\n"
+          ret << "<br />"
+        else
+          ret << " "
+        end
+        already_wrote_char = true
       end
-    end.html_safe
-    
+
+      if @insertions.include? i
+        tag_list = @insertions[i]
+        tag_list.each do |tag|
+          if tag.start_pos == i
+            ret << tag.start_tag_str
+          end
+        end
+      end
+      if not already_wrote_char
+        ret << c
+      end
+      if @insertions.include? i
+        tag_list = @insertions[i]
+        tag_list.each do |tag|
+          if tag.end_pos == i
+            ret << tag.end_tag_str
+          end
+        end
+      end
+    end
+    ret << "</p>"
+    ret
   end
   
 end

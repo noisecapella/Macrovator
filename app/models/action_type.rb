@@ -26,4 +26,12 @@ class ActionType < ActiveRecord::Base
   def is_keypress?
     false
   end
+
+  def self.factory_create(params)
+    get_action_types.each do |action_type_class|
+      if action_type_class.to_s == params[:type]
+        type.new(params)
+      end
+    end
+  end
 end
