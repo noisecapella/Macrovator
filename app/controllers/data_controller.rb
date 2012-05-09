@@ -42,7 +42,6 @@ class DataController < ApplicationController
     @datum.action_list.datum = @datum
     @datum.user = current_user
     @user_state = current_user.user_state
-    @user_state.reset(@datum.action_list.id)
     respond_to do |format|
       if not @datum.action_list.save
         format.html { render action: "new" }
@@ -50,13 +49,17 @@ class DataController < ApplicationController
       elsif not @datum.save
         format.html { render action: "new" }
         format.json { render json: @datum.errors, status: :unprocessable_entity }
-      elsif not @user_state.save
-        format.html { render action: "new" }
-        format.json { render json: @user_state.errors, status: :unprocessable_entity }
-
       else
-        format.html { redirect_to @datum, notice: 'Datum was successfully created.' }
-        format.json { render json: @datum, status: :created, location: @datum }
+        @user_state.reset(@datum.action_list.id)
+
+        if not @user_state.save
+          format.html { render action: "new" }
+          format.json { render json: @user_state.errors, status: :unprocessable_entity }
+
+        else
+          format.html { redirect_to @datum, notice: 'Datum was successfully created.' }
+          format.json { render json: @datum, status: :created, location: @datum }
+        end
       end
     end
   end
@@ -88,6 +91,16 @@ class DataController < ApplicationController
     respond_to do |format|
       format.html { redirect_to data_url }
       format.json { head :no_content }
+    end
+  end
+
+  def select_changed
+    @type = params[:datum][:source_type]
+
+    respond_to do |format|
+      format.html {
+        render :partial => true
+      }
     end
   end
 end

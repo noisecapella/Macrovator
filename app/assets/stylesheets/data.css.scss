@@ -12,13 +12,27 @@ $total_width: 800px;
     min-width: $total_width;
 }
 
-#content
+#show_content
 {
 	margin: $margin_size;
 	padding: $padding_size;
 	border: $border_size solid $border_color;
 	border-radius: $border_radius;
 	-moz-border-radius: $border_radius;
+
+	height: 700px;
+	overflow: auto;
+
+	width: 0.6 * $total_width;
+	float: left;
+
+	font-family: Andale Mono, monospace;
+}
+
+#content_or_url
+{
+	margin: $margin_size;
+	padding: $padding_size;
 
 	height: 700px;
 	overflow: auto;
@@ -78,6 +92,7 @@ $total_width: 800px;
     border-right: 0px;
     border-bottom: 0px;
 }
+
 .selected_bottom
 {
     border-top: 0px;

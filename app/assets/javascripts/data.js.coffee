@@ -127,5 +127,12 @@ $ ->
         setTimeout(sendKeystrokes, 200);
         bind_record_keystrokes()
 
+        $("#datum_source_type").live('ajax:success', (evt, data, status, xhr) ->
+                fields = $('#content_text')
+
+                fields.html(data)
+        )
+
+
 root.bind_record_keystrokes = bind_record_keystrokes
 

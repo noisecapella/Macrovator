@@ -12,12 +12,21 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br />
+    <%= f.label :title %>:
     <%= f.text_field :title %>
   </div>
   <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
+    <%= f.label :source_type %>: 
+    <%= select_tag :datum_source_type, options_for_select(Datum::SourceTypes), :name => "datum[source_type]",
+    :'data-remote' => 'true',
+    :'data-url' => url_for(:controller => :data, :action => :select_changed),
+    :'data-type' => 'html'
+%>
+  </div>
+  <div class="field" id="content_text">
+    <%=
+@type = Datum::SourceTypes.values.first
+ render "select_changed" %>
   </div>
   <div class="actions">
     <%= f.submit %>

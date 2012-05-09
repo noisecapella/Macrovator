@@ -1,0 +1,10 @@
+<%= fields_for :datum do |f| %>
+<% if @type == "from_clip" %>
+<%= label_tag :content, "Content" %><br />
+<textarea id="content_or_url" name="datum[content]"></textarea>
+<% elsif @type == "download_url" or @type == "live_url" %>
+<%= label_tag :content, "URL" %>: 
+<input type="text" id="url" name="datum[content]" />
+
+<% end %>
+<% end %>

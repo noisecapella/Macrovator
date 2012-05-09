@@ -30,8 +30,9 @@ class ActionType < ActiveRecord::Base
   def self.factory_create(params)
     get_action_types.each do |action_type_class|
       if action_type_class.to_s == params[:type]
-        type.new(params)
+        return action_type_class.new(params)
       end
     end
+    nil
   end
 end

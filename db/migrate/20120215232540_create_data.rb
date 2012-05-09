@@ -4,6 +4,7 @@ class CreateData < ActiveRecord::Migration
       t.text :content
       t.text :title
       t.references :user
+      t.string :source_type
 
       t.timestamps
     end
