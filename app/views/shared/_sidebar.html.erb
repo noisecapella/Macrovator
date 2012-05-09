@@ -1,7 +1,7 @@
 <%
-user_state = current_user.user_state
+user_state = current_user.nil? ? nil : current_user.user_state
 
-index = user_state.current_action_list_index
+index = user_state.nil? ? nil : user_state.current_action_list_index
 count = @datum.action_list.action_types.count
 
 action_types = @datum.action_list.action_types
@@ -48,7 +48,7 @@ action_types.count.times do |i|
   selected = nil
   selected_string = ""
 
-  if user_state.current_action_list_id == @datum.action_list.id and (index == i or (index == count and i == count - 1))
+  if not user_state.nil? and user_state.current_action_list_id == @datum.action_list.id and (index == i or (index == count and i == count - 1))
     selected = true
     selected_string = if index == count
                         "<div class='selected_bottom'>"

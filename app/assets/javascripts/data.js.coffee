@@ -37,8 +37,8 @@ sendKeystrokes = () ->
         setTimeout(sendKeystrokes, 200);
 
 bind_record_keystrokes = () ->
-        message_is_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording (ctrl+r)</a>'
-        message_stopped_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes (ctrl+r)</a>'
+        message_is_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Stop recording</a>'
+        message_stopped_recording = '<a href="#" onclick="return false;" id="record_keystrokes_link">Record keystrokes</a>'
 
         if IS_RECORDING
                 $("#record_keystrokes_div").html(message_is_recording)

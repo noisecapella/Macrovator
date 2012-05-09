@@ -11,9 +11,9 @@
      tagger.add_tags("<span class='mark'>", @user_state.current_position, "</span>", @user_state.last_mark_position)
    end
 
-   tagger.add_tags("<span class='cursor'>", @user_state.current_position, 
-                     "</span>", @user_state.current_position + 1)
-   
+   tagger.add_tags("<span class='cursor'>|</span>", @user_state.current_position)
+   print tagger.debug + "\n"
+   print tagger.display_content
    tagger.display_content.html_safe
    
  %>

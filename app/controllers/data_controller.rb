@@ -4,10 +4,8 @@ class DataController < ApplicationController
   def show
     @datum = Datum.find(params[:id])
 
-    user_state = current_user.user_state
-
-    if not current_user.nil? and @datum.action_list.id == user_state.current_action_list_id and not user_state.temp_current_data.nil?
-      @user_state = user_state
+    if not current_user.nil? and @datum.action_list.id == current_user.user_state.current_action_list_id and not current_user.user_state.temp_current_data.nil?
+      @user_state = current_user.user_state
     else
       @user_state = UserState.new
       @user_state.reset(@datum.action_list.id)
@@ -43,6 +41,8 @@ class DataController < ApplicationController
     @datum.action_list = ActionList.new(:name => "Empty")
     @datum.action_list.datum = @datum
     @datum.user = current_user
+    @user_state = current_user.user_state
+    @user_state.reset(@datum.action_list.id)
     respond_to do |format|
       if not @datum.action_list.save
         format.html { render action: "new" }
@@ -50,6 +50,10 @@ class DataController < ApplicationController
       elsif not @datum.save
         format.html { render action: "new" }
         format.json { render json: @datum.errors, status: :unprocessable_entity }
+      elsif not @user_state.save
+        format.html { render action: "new" }
+        format.json { render json: @user_state.errors, status: :unprocessable_entity }
+
       else
         format.html { redirect_to @datum, notice: 'Datum was successfully created.' }
         format.json { render json: @datum, status: :created, location: @datum }

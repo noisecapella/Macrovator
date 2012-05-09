@@ -7,6 +7,10 @@ class Tagger
     @replace_spaces_with_tags = false
   end
 
+  def debug
+    @insertions.to_s
+  end
+
   def add_insertion(pos, tag)
     if not @insertions.include? pos
       @insertions[pos] = [tag]
@@ -15,7 +19,7 @@ class Tagger
     end
   end
 
-  def add_tags(str, pos, end_str, end_pos)
+  def add_tags(str, pos, end_str=nil, end_pos=nil)
     tag = Tag.new(str, end_str, pos, end_pos)
 
     add_insertion(pos, tag)
@@ -39,14 +43,10 @@ class Tagger
     ret = "<p>"
     @content.length.times do |i|
       c = @content[i]
-      already_wrote_char = false
+
+      add_char_after = false
       if @replace_spaces_with_tags and (c == "\n" or c == " " or c == "\t")
-        if c == "\n"
-          ret << "<br />"
-        else
-          ret << " "
-        end
-        already_wrote_char = true
+        add_char_after = true
       end
 
       if @insertions.include? i
@@ -57,7 +57,7 @@ class Tagger
           end
         end
       end
-      if not already_wrote_char
+      if not add_char_after
         ret << c
       end
       if @insertions.include? i
@@ -68,6 +68,16 @@ class Tagger
           end
         end
       end
+
+
+      if add_char_after
+        if c == "\n"
+          ret << "<br />"
+        else
+          ret << " "
+        end
+      end
+
     end
     ret << "</p>"
     ret
