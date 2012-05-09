@@ -23,8 +23,8 @@ update_content = (data) ->
 
 
 cursorAnimation = () ->
-        $(".cursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"})
-        $(".rcursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"})
+        $(".cursor").animate({opacity:"1"}).animate({opacity:"0"})
+        # $(".rcursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"})
 
 sendKeystrokes = () ->
         if KEYBOARD_ARRAY.length > 0
@@ -55,7 +55,7 @@ bind_record_keystrokes = () ->
                         IS_RECORDING = false
                         $("#record_keystrokes_div").html(message_stopped_recording)
                 bind_record_keystrokes()
-    )
+        )
 
 
 popup_search = () ->
