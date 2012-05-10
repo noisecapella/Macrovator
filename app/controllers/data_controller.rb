@@ -95,7 +95,14 @@ class DataController < ApplicationController
   end
 
   def select_changed
-    @type = params[:datum][:source_type]
+    @datum = Datum.find_by_id(params[:id])
+    if @datum.nil?
+      @datum = Datum.new
+    end
+    @datum.source_type = params[:datum][:source_type]
+    if @datum.source_type.nil? or @datum.source_type.empty?
+      @datum.source_type = "from_clip"
+    end
 
     respond_to do |format|
       format.html {

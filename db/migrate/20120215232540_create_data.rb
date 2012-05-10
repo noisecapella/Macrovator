@@ -5,6 +5,8 @@ class CreateData < ActiveRecord::Migration
       t.text :title
       t.references :user
       t.string :source_type
+      t.string :url
+      t.integer :url_refresh_count
 
       t.timestamps
     end

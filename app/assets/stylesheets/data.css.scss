@@ -12,7 +12,7 @@ $total_width: 800px;
     min-width: $total_width;
 }
 
-#show_content
+#content
 {
 	margin: $margin_size;
 	padding: $padding_size;
@@ -29,7 +29,7 @@ $total_width: 800px;
 	font-family: Andale Mono, monospace;
 }
 
-#content_or_url
+#datum_content
 {
 	margin: $margin_size;
 	padding: $padding_size;
@@ -38,7 +38,6 @@ $total_width: 800px;
 	overflow: auto;
 
 	width: 0.6 * $total_width;
-	float: left;
 
 	font-family: Andale Mono, monospace;
 }
@@ -76,6 +75,7 @@ $total_width: 800px;
     border-left: 1px solid black;
     display: inline-block!important; */
     color: black;
+    font-family: Arial;
 }
 
 .rcursor

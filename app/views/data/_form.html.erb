@@ -1,4 +1,4 @@
-<%= form_for(@datum) do |f| %>
+<%= form_for @datum do |f| %>
   <% if @datum.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@datum.errors.count, "error") %> prohibited this datum from being saved:</h2>
@@ -17,15 +17,15 @@
   </div>
   <div class="field">
     <%= f.label :source_type %>: 
-    <%= select_tag :datum_source_type, options_for_select(Datum::SourceTypes), :name => "datum[source_type]",
+    <%= select_tag "datum[source_type]", options_for_select(Datum::SourceTypes, @datum.source_type),
     :'data-remote' => 'true',
-    :'data-url' => url_for(:controller => :data, :action => :select_changed),
+    :'data-url' => url_for(:controller => :data, :action => :select_changed, :id => @datum.id),
     :'data-type' => 'html'
 %>
+
   </div>
   <div class="field" id="content_text">
     <%=
-@type = Datum::SourceTypes.values.first
  render "select_changed" %>
   </div>
   <div class="actions">
