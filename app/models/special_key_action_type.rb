@@ -1,7 +1,13 @@
 class SpecialKeyActionType < ActionType
   acts_as_citier
 
-  KeytypeMap = {40 => :down, 38 => :up, 37 => :left, 39 => :right, 8 => :backspace, 13 => :enter, 46 => :delete}
+  KeytypeMap = {40 => :down, 
+    38 => :up,
+    37 => :left,
+    39 => :right,
+    8 => :backspace,
+    13 => :enter,
+    46 => :delete}
 
   attr_accessible :keytype
 
