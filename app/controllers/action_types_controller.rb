@@ -39,13 +39,15 @@ class ActionTypesController < ApplicationController
 
   def create_current
     #fill in some missing params from user_state
-    @action_type = ActionType.factory_create(params[:action_type])
+    @action_type = ActionType.factory_create(params[:action_type][:type], params)
     user_state = current_user.user_state
     switch_action_list(user_state.current_action_list.id)
     @action_type.action_list = user_state.current_action_list
     @action_type.position = user_state.current_action_list_index
 
     verify_user(@action_type.action_list.datum.user.id)
+
+    increment_and_save_positions(@action_type.position)
 
     @errors = nil
     @user_state = user_state
@@ -59,6 +61,11 @@ class ActionTypesController < ApplicationController
         command.insert_index = @user_state.current_action_list_index
         command.save
       end
+
+      user_state.current_action_list_index = user_state.current_action_list_index + 1
+      if not user_state.save
+        raise "Error updating user state position in index"
+      end
     end
     
     respond_to do |format|
@@ -69,9 +76,10 @@ class ActionTypesController < ApplicationController
   # POST /action_types
   # POST /action_types.json
   def create
-    @action_type = ActionType.new(params[:action_type])
-
+    @action_type = ActionType.factory_create(params[:action_type][:type], params)
     verify_user(@action_type.action_list.datum.user.id)
+
+    increment_and_save_positions(@action_type.position)
 
     respond_to do |format|
       if @action_type.save
@@ -139,5 +147,26 @@ class ActionTypesController < ApplicationController
         render :partial => true
       }
     end
+  end
+
+  protected
+  def method_missing(meth, *arg, &blk)
+    if /_action_type_url$/ =~ meth
+      url_for(:controller => :action_types)
+    else
+      super
+    end
+  end
+
+  protected
+  def increment_and_save_positions(position)
+    action_types_with_greater_position = ActionType.where "position >= " + position.to_s
+    action_types_with_greater_position.each do |action_type|
+      action_type.position = action_type.position + 1
+      if not action_type.save
+        raise "Unable to save ActionType while incrementing position"
+      end
+    end
+
   end
 end

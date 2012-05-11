@@ -4,7 +4,7 @@ class ActionType < ActiveRecord::Base
 
   belongs_to :action_list
 
-  attr_accessible :action_list, :position, :type
+  attr_accessible :action_list, :action_list_id, :position, :type
 
   validates :action_list, :presence => true
   validates :position, :presence => true
@@ -33,7 +33,9 @@ class ActionType < ActiveRecord::Base
         if params.nil?
           return action_type_class.new
         else
-          return action_type_class.new(params)
+          new_params = params[:action_type].merge(params[action_type_class.to_s.underscore])
+          print "NEW_PARAMS: ", new_params, "\n"
+          return action_type_class.new(new_params)
         end
       end
     end

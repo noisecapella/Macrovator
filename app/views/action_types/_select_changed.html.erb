@@ -3,10 +3,11 @@
 <% 
 arguments = @action_type.make_arguments
 arguments.each do |arg|
+object_string = @action_type.class.to_s.underscore
+action_type_key = object_string + "[" + arg.key.to_s + "]"
 %>
-<%= label_tag :key, arg.name.to_s %>
-<%= hidden_field_tag :key, arg.key.to_s %>
-<%= text_field_tag :value, arg.value.to_s %>
+<%= label_tag :name, arg.name.to_s %>
+<%= text_field_tag action_type_key, arg.value.to_s %>
 
 <% end %>
 </p>
