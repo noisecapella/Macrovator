@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $ ->
-        $("#action_type_action_type").live('ajax:success', (evt, data, status, xhr) ->
+        $("#action_type_type").live('ajax:success', (evt, data, status, xhr) ->
                 fields = $('#argument_fields')
 
                 fields.html(data)

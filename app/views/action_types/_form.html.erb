@@ -1,3 +1,13 @@
+<%
+   def method_missing(meth, *args, &blk)
+     # fix url helpers for views we don't provide
+     if /_action_types_path$/ =~ meth
+       url_for(:controller => :action_types)
+     else
+       super
+     end
+   end
+%>
 <%= form_for @action_type do |f| %>
   <% if @action_type.errors.any? %>
     <div id="error_explanation">
@@ -12,9 +22,9 @@
     <% end %>
   <div class="field">
     <%= f.label :action_type %><br />
-    <%= select_tag :action_type_action_type,
+    <%= select_tag :action_type_type,
 	options_from_collection_for_select(ActionType::get_action_types, :my_type, :my_name),
-	:name => "action_type[action_type]",
+	:name => "action_type[type]",
 	:'data-remote' => 'true',
     :'data-url' => url_for(:controller => :action_types, :action => :select_changed, :action_list_id => @action_list.id, :action_type_id => @action_type.nil? ? nil : @action_type.id),
     :'data-type' => 'html'

@@ -27,10 +27,14 @@ class ActionType < ActiveRecord::Base
     false
   end
 
-  def self.factory_create(params)
+  def self.factory_create(type_name, params=nil)
     get_action_types.each do |action_type_class|
-      if action_type_class.to_s == params[:type]
-        return action_type_class.new(params)
+      if action_type_class.to_s == type_name
+        if params.nil?
+          return action_type_class.new
+        else
+          return action_type_class.new(params)
+        end
       end
     end
     nil

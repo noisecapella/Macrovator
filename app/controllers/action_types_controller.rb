@@ -122,7 +122,7 @@ class ActionTypesController < ApplicationController
   end
 
   def select_changed
-    action_type_type = params[:action_type][:action_type]
+    action_type_type = params[:action_type][:type]
     action_type_id = params[:action_type][:action_type_id]
     action_list_id = params[:action_list_id]
     switch_action_list(action_list_id)

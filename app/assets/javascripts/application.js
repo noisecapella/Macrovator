@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require data
+//= require action_types
 
 //  sdf= require_tree .
 
