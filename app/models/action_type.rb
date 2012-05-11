@@ -34,7 +34,6 @@ class ActionType < ActiveRecord::Base
           return action_type_class.new
         else
           new_params = params[:action_type].merge(params[action_type_class.to_s.underscore])
-          print "NEW_PARAMS: ", new_params, "\n"
           return action_type_class.new(new_params)
         end
       end

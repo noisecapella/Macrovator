@@ -7,7 +7,10 @@ class SpecialKeyActionType < ActionType
     39 => :right,
     8 => :backspace,
     13 => :enter,
-    46 => :delete}
+    46 => :delete,
+    35 => :end,
+    36 => :home
+  }
 
   attr_accessible :keytype
 
@@ -96,6 +99,20 @@ class SpecialKeyActionType < ActionType
         user_state.temp_highlight_start += 1
       end
       user_state.current_position += 1
+    when :end
+      new_position = data.index("\n", user_state.current_position)
+      if new_position.nil? or new_position < 0
+        new_position = data.length - 1
+      end
+      user_state.current_position = new_position
+    when :home
+      new_position = data.rindex("\n", user_state.current_position.nil? ? nil : (user_state.current_position == 0 ? 0 : user_state.current_position - 1))
+      if new_position.nil? or new_position < 0
+        new_position = 0
+      else
+        new_position += 1
+      end
+      user_state.current_position = new_position
     end
 
     if user_state.current_position < 0

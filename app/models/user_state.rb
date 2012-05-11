@@ -33,7 +33,7 @@ class UserState < ActiveRecord::Base
 
   def reset_text
     datum = current_action_list.datum
-    self.temp_current_data = current_action_list.datum.retrieve_content
+    self.temp_current_data = current_action_list.datum.retrieve_content.gsub("\r\n", "\n")
   end
 
   def reset(new_action_list_id)
