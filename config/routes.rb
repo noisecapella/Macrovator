@@ -29,7 +29,7 @@ Site::Application.routes.draw do
   end
 
   resources :action_types do
-    member do
+    collection do
       get 'select_changed'
     end
     collection do

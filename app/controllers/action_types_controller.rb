@@ -124,14 +124,13 @@ class ActionTypesController < ApplicationController
   def select_changed
     action_type_type = params[:action_type][:action_type]
     action_type_id = params[:action_type][:action_type_id]
-    switch_action_list(action_type_id)
-
-    # note that this isn't saved here
-    @action_list = ActionList.find_by_id(params[:id])
+    action_list_id = params[:action_list_id]
+    switch_action_list(action_list_id)
+    @action_list = ActionList.find(action_list_id)
     @action_type = ActionType.find_by_id(action_type_id)
     
-    if @action_list.nil? or @action_type.nil?
-      @action_type = ActionType.new(:action_type => action_type_type)
+    if @action_type.nil?
+      @action_type = ActionType.factory_create(action_type_type)
       @action_type.action_list = @action_list
     end
 
