@@ -8,4 +8,7 @@ class EndActionType < ActionType
   def make_arguments
     []
   end
+  def process(user_state)
+    # do nothing
+  end
 end

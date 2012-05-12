@@ -131,7 +131,7 @@ class ActionListsController < ApplicationController
     @action_list = ActionList.find(params[:id])
     user_state = current_user.user_state
     switch_action_list(@action_list.id)
-    render_status(true, @action_list.action_types.count - user_state.current_action_list_index, false)
+    render_status(true, :rest, false)
   end
 
   def delete_current_action_type
@@ -148,13 +148,49 @@ class ActionListsController < ApplicationController
     render_status
   end
 
+  protected
+  def inner_loop(user_state)
+    if user_state.current_action_list_index == 0
+      user_state.reset(@action_list.id)
+    end
+    
+    if user_state.invalid?
+      user_state.reset(@action_list.id)
+    else
+      if not user_state.in_progress?
+        user_state.reset_count(@action_list.id)
+      end
+      
+      current_action_list = user_state.current_action_list
+      
+      current_action_type = current_action_list.action_types[user_state.current_action_list_index]
+      
+      begin
+        current_action_type.process(user_state)
+      rescue RuntimeError => e
+        @errors = "Error: " + e.to_s
+        user_state.current_action_list_index = 0
+      else
+        user_state.current_action_list_index += 1
+      end
+    end
+    
+    if not user_state.save
+      raise user_state.errors.full_messages.join("\n")
+    end
+    
+    if not @errors.nil?
+      raise @errors
+    end
+  end
+  
+
+  protected
   def render_status(do_execute = false, execute_count = 0, any_alter_command_in_place = false)
-    # if execute_count > 0, execute that many action_types. then render
-    # content, info and the sidebar, passing it back as json
-    print "render_status(" + execute_count.to_s + ", " + any_alter_command_in_place.to_s + ")"
     @errors = nil
 
 
+    user_state = nil
     if do_execute
       switch_action_list(@action_list.id)
 
@@ -163,43 +199,20 @@ class ActionListsController < ApplicationController
       if any_alter_command_in_place
         index = user_state.current_action_list_index
         user_state.reset(@action_list.id)
-        execute_count += index
+        if execute_count != :rest
+          execute_count += index
+        end
       end
     end
 
     begin
-      execute_count.times do |i|
-        if user_state.current_action_list_index == 0
-          user_state.reset(@action_list.id)
+      if execute_count == :rest
+        while true do
+          inner_loop(user_state)
         end
-        
-        if user_state.invalid?
-          user_state.reset(@action_list.id)
-        else
-          if not user_state.in_progress?
-            user_state.reset_count(@action_list.id)
-          end
-
-          current_action_list = user_state.current_action_list
-          
-          current_action_type = current_action_list.action_types[user_state.current_action_list_index]
-
-          begin
-            current_action_type.process(user_state)
-          rescue RuntimeError => e
-            @errors = "Error: " + e.to_s
-            user_state.current_action_list_index = 0
-          else
-            user_state.current_action_list_index += 1
-          end
-        end
-        
-        if not user_state.save
-          raise user_state.errors.full_messages.join("\n")
-        end
-
-        if not @errors.nil?
-          raise @errors
+      else
+        execute_count.times do |i|
+          inner_loop(user_state)
         end
       end
     rescue RuntimeError => e

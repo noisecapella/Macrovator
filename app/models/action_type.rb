@@ -15,7 +15,7 @@ class ActionType < ActiveRecord::Base
     # this can't be a constant because we can't refer to types of subclasses before they exist
     [SearchActionType, CutActionType, PasteActionType,
      KeyPressActionType, SpecialKeyActionType, ModifiedKeyActionType,
-     BeginActionType, EndActionType]
+     BeginActionType, EndActionType, WhileNoErrorActionType]
   end
 
   def self.my_type
