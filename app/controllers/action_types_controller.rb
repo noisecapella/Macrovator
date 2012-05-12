@@ -14,11 +14,11 @@ class ActionTypesController < ApplicationController
   # GET /action_types/new.json
   def new
     switch_action_list(params[:action_list_id])
-    @position = params[:position].to_i
+    
     @action_list = current_user.user_state.current_action_list
     
-    @action_type = SearchActionType.new(:action_list => @action_list)
-
+    @action_type = SearchActionType.new(:action_list => @action_list,
+                                        :position => params[:position].to_i)
     render_new
   end
 
@@ -90,7 +90,7 @@ class ActionTypesController < ApplicationController
           command.save
         end
 
-        format.html { redirect_to url_for(:controller => :action_types, :action => :show, :id => @action_type.id), notice: 'Action type was successfully created.' }
+        format.html { redirect_to @action_type.action_list.datum, notice: 'Action type was successfully created.' }
         format.json { render json: @action_type, status: :created, location: @action_type }
       else
         format.html { render_new }
@@ -106,8 +106,10 @@ class ActionTypesController < ApplicationController
     verify_user(@action_type.action_list.datum.user.id)
 
     respond_to do |format|
-      if @action_type.update_attributes(params[:action_type])
-        format.html { redirect_to @action_type, notice: 'Action type was successfully updated.' }
+      new_action_type = ActionType.factory_create(params[:action_type][:type], params)
+      if new_action_type.save
+        @action_type.destroy
+        format.html { redirect_to @action_type.action_list.datum, notice: 'Action type was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

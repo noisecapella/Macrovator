@@ -23,7 +23,7 @@ update_content = (data) ->
 
 
 cursorAnimation = () ->
-        $(".cursor").animate({opacity:"1"}).animate({opacity:"0"})
+        # $(".cursor").animate({opacity:"1"}).animate({opacity:"0"})
         # $(".rcursor").animate({borderLeftColor:"#FFFFFF"}).animate({borderLeftColor:"#000000"})
 
 sendKeystrokes = () ->

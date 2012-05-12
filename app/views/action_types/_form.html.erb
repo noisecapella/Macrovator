@@ -13,10 +13,10 @@
   <div class="field">
     <%= f.label :action_type %><br />
     <%= select_tag :action_type_type,
-	options_from_collection_for_select(ActionType::get_action_types, :my_type, :my_name),
+	options_from_collection_for_select(ActionType::get_action_types, :my_type, :my_name, :selected => @action_type.type),
 	:name => "action_type[type]",
 	:'data-remote' => 'true',
-    :'data-url' => url_for(:controller => :action_types, :action => :select_changed, :action_list_id => @action_list.id, :action_type_id => @action_type.nil? ? nil : @action_type.id),
+    :'data-url' => url_for(:controller => :action_types, :action => :select_changed, :action_list_id => @action_type.action_list.id, :action_type_id => @action_type.nil? ? nil : @action_type.id),
     :'data-type' => 'html'
 	%>
     
@@ -32,7 +32,7 @@
   </div>
 
 <div id="position">
-  <%= hidden_field_tag "action_type[position]", @position %>
+  <%= hidden_field_tag "action_type[position]", @action_type.position %>
 </div>
 
   <div class="actions">
