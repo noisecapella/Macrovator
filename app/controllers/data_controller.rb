@@ -70,10 +70,19 @@ class DataController < ApplicationController
     @datum = Datum.find(params[:id])
     verify_user(@datum.user.id)
 
+    action_list = @datum.action_list
+    switch_action_list(action_list.id)
+
     respond_to do |format|
       if @datum.update_attributes(params[:datum])
-        format.html { redirect_to @datum, notice: 'Datum was successfully updated.' }
-        format.json { head :no_content }
+        @datum.user.user_state.reset(action_list.id)
+        if not @datum.user.user_state.save
+          format.html { render action: "edit" }
+          format.json { render json: @datum.user.user_state.errors, status: :unprocessable_entity }
+        else          
+          format.html { redirect_to @datum, notice: 'Datum was successfully updated.' }
+          format.json { head :no_content }
+        end
       else
         format.html { render action: "edit" }
         format.json { render json: @datum.errors, status: :unprocessable_entity }

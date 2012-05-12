@@ -13,8 +13,9 @@ class ActionType < ActiveRecord::Base
   #TODO: figure out a better way to do this
   def self.get_action_types
     # this can't be a constant because we can't refer to types of subclasses before they exist
-    [SearchActionType, CutActionType, PasteActionType, KeyPressActionType, 
-     SpecialKeyActionType, ModifiedKeyActionType]
+    [SearchActionType, CutActionType, PasteActionType,
+     KeyPressActionType, SpecialKeyActionType, ModifiedKeyActionType,
+     BeginActionType, EndActionType]
   end
 
   def self.my_type
@@ -33,7 +34,15 @@ class ActionType < ActiveRecord::Base
         if params.nil?
           return action_type_class.new
         else
-          new_params = params[:action_type].merge(params[action_type_class.to_s.underscore])
+          specific_name = action_type_class.to_s.underscore
+          new_params = 
+            if params[:action_type].nil?
+              params[specific_name]
+            elsif params[specific_name].nil?
+              params[:action_type]
+            else
+              params[:action_type].merge(params[specific_name])
+            end
           return action_type_class.new(new_params)
         end
       end
