@@ -15,15 +15,24 @@ class Datum < ActiveRecord::Base
     if self.source_type == "live_url" or (self.source_type == "download_url" and (self.url_refresh_count.nil? or self.url_refresh_count < 1))
       # TODO: this is a pretty bad solution. improve it
 
-      self.content = ""
+      new_content = ""
       uri = URI.parse(self.url)
-      Net::HTTP.start(uri.host, uri.port) do |http|
-        http.request_get(uri.path) do |res|
-          res.read_body do |seg|
-            self.content << seg
-
-            sleep 0.005
+      begin
+        Net::HTTP.start(uri.host, uri.port) do |http|
+          http.request_get(uri.path) do |res|
+            res.read_body do |seg|
+              new_content << seg
+              
+              sleep 0.005
+            end
           end
+        end
+      rescue SocketError
+        if self.url_refresh_count >= 1
+          # don't bother
+          new_content = self.content
+        else
+          raise "Cannot load data from url"
         end
       end
 
@@ -33,6 +42,7 @@ class Datum < ActiveRecord::Base
         self.url_refresh_count += 1
       end
 
+      self.content = new_content
       if not self.save
         raise "Cannot save user state content"
       end
