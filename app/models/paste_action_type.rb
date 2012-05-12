@@ -1,6 +1,4 @@
 class PasteActionType < ActionType
-  acts_as_citier
-
   def describe
     "Paste"
   end

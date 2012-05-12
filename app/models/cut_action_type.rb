@@ -1,6 +1,4 @@
 class CutActionType < ActionType
-  acts_as_citier
-
   def describe
     "Cut"
   end

@@ -90,7 +90,7 @@ class ActionTypesController < ApplicationController
           command.save
         end
 
-        format.html { redirect_to @action_type, notice: 'Action type was successfully created.' }
+        format.html { redirect_to url_for(:controller => :action_types, :action => :show, :id => @action_type.id), notice: 'Action type was successfully created.' }
         format.json { render json: @action_type, status: :created, location: @action_type }
       else
         format.html { render_new }

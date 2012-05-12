@@ -1,6 +1,4 @@
 class BeginActionType < ActionType
-  acts_as_citier
-
   def describe
     "Begin"
   end

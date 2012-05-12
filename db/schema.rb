@@ -115,38 +115,11 @@ ActiveRecord::Schema.define(:version => 20120512163006) do
     t.datetime "updated_at",      :null => false
   end
 
-  create_view "view_begin_action_types", "CREATE VIEW \"view_begin_action_types\" AS SELECT action_types.id, \"action_list_id\",\"position\",\"type\",\"created_at\",\"updated_at\" FROM action_types, begin_action_types WHERE action_types.id = begin_action_types.id", :force => true do |v|
-    v.column :id
-    v.column :action_list_id
-    v.column :position
-    v.column :type
-    v.column :created_at
-    v.column :updated_at
-  end
-
-  create_view "view_cut_action_types", "CREATE VIEW \"view_cut_action_types\" AS SELECT action_types.id, \"action_list_id\",\"position\",\"type\",\"created_at\",\"updated_at\" FROM action_types, cut_action_types WHERE action_types.id = cut_action_types.id", :force => true do |v|
-    v.column :id
-    v.column :action_list_id
-    v.column :position
-    v.column :type
-    v.column :created_at
-    v.column :updated_at
-  end
-
   create_view "view_delete_commands", "CREATE VIEW \"view_delete_commands\" AS SELECT commands.id, \"type\",\"order\",\"user_state_id\",\"created_at\",\"updated_at\" FROM commands, delete_commands WHERE commands.id = delete_commands.id", :force => true do |v|
     v.column :id
     v.column :type
     v.column :order
     v.column :user_state_id
-    v.column :created_at
-    v.column :updated_at
-  end
-
-  create_view "view_end_action_types", "CREATE VIEW \"view_end_action_types\" AS SELECT action_types.id, \"action_list_id\",\"position\",\"type\",\"created_at\",\"updated_at\" FROM action_types, end_action_types WHERE action_types.id = end_action_types.id", :force => true do |v|
-    v.column :id
-    v.column :action_list_id
-    v.column :position
-    v.column :type
     v.column :created_at
     v.column :updated_at
   end
@@ -180,15 +153,6 @@ ActiveRecord::Schema.define(:version => 20120512163006) do
     v.column :updated_at
     v.column :keys
     v.column :metakeys
-  end
-
-  create_view "view_paste_action_types", "CREATE VIEW \"view_paste_action_types\" AS SELECT action_types.id, \"action_list_id\",\"position\",\"type\",\"created_at\",\"updated_at\" FROM action_types, paste_action_types WHERE action_types.id = paste_action_types.id", :force => true do |v|
-    v.column :id
-    v.column :action_list_id
-    v.column :position
-    v.column :type
-    v.column :created_at
-    v.column :updated_at
   end
 
   create_view "view_search_action_types", "CREATE VIEW \"view_search_action_types\" AS SELECT action_types.id, \"action_list_id\",\"position\",\"type\",\"created_at\",\"updated_at\",\"search_key\" FROM action_types, search_action_types WHERE action_types.id = search_action_types.id", :force => true do |v|
