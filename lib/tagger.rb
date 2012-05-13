@@ -1,6 +1,19 @@
 class Tagger
   Tag = Struct.new :start_tag_str, :end_tag_str, :start_pos, :end_pos
 
+  def h(c)
+    case c
+    when "<"
+      "&lt;"
+    when ">"
+      "&gt;"
+    when "&"
+      "&amp;"
+    else
+      c
+    end
+  end
+
   def initialize(content)
     @content = content
     @insertions = {}
@@ -58,7 +71,7 @@ class Tagger
       elsif c == " " or c == "\t"
         ret << "&nbsp;"
       else
-        ret << c
+        ret << h(c)
       end
       if @insertions.include? i
         tag_list = @insertions[i]
