@@ -182,6 +182,8 @@ class ActionListsController < ApplicationController
     if not @errors.nil?
       raise @errors
     end
+
+    return user_state.current_action_list_index == user_state.current_action_list.action_types.count
   end
   
 
@@ -208,11 +210,15 @@ class ActionListsController < ApplicationController
     begin
       if execute_count == :rest
         while true do
-          inner_loop(user_state)
+          if inner_loop(user_state)
+            break
+          end
         end
       else
         execute_count.times do |i|
-          inner_loop(user_state)
+          if inner_loop(user_state)
+            break
+          end
         end
       end
     rescue RuntimeError => e
